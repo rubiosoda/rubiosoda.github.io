@@ -1,0 +1,1014 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revisión del correo | David Rubio Informática</title>
+<meta name="description" content="Comprueba gratis si alguien puede enviar correos falsos en nombre de tu negocio. Revisamos SPF, DKIM y DMARC de tu dominio en unos segundos y te explicamos cómo arreglarlo.">
+<meta property="og:title" content="¿Pueden suplantar el correo de tu negocio?">
+<meta property="og:description" content="Escribe tu dominio y en unos segundos sabrás si está protegido contra correos falsos en tu nombre.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1C6AA0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231C6AA0'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23F4B43A'%3EDR%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  /* Misma identidad que index.html: papel claro, azul mar y amarillo sol. Herramienta en dos columnas: formulario a la izquierda, qué miramos a la derecha; resultado a todo el ancho. */
+  :root {
+    --paper: #F3F6F7;
+    --white: #FFFFFF;
+    --ink: #13283F;
+    --muted: #4F6072;
+    --sea: #1C6AA0;
+    --sea-deep: #134E78;
+    --sea-soft: #DCEAF4;
+    --sun: #F4B43A;
+    --sun-soft: #FCE9C2;
+    --line: #D3DDE4;
+    --ok: #1D6B45;
+    --ok-soft: #DDEFE4;
+    --warn: #8A4F00;
+    --warn-soft: #FCE9C2;
+    --bad: #A3231B;
+    --bad-soft: #F8DEDB;
+    --info: #3F5468;
+    --info-soft: #E6EDF2;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+    --radius-sm: 10px;
+    --radius-lg: 22px;
+    --wrap: 68rem;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.55;
+  }
+  a { color: var(--sea-deep); text-underline-offset: 3px; }
+  :focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 1rem; }
+  @media (min-width: 40rem) { .wrap { padding: 0 1.5rem; } }
+  .skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--white); padding: .5rem 1rem; z-index: 10; }
+  .skip:focus { left: 1rem; }
+
+  /* Cabecera */
+  .top { background: var(--white); border-bottom: 1px solid var(--line); }
+  .top .wrap { display: flex; align-items: center; gap: .75rem; min-height: 4rem; }
+  .brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; color: var(--ink); margin-right: auto; min-width: 0; }
+  .brand .mark { width: 2.4rem; height: 2.4rem; border-radius: 11px; background: var(--sea); color: var(--sun); display: grid; place-items: center; font-weight: 700; font-size: 1rem; flex: none; }
+  .brand-text { min-width: 0; }
+  .brand-text b { display: block; font-size: 1.02rem; line-height: 1.15; }
+  .brand-text small { display: block; font-size: .85rem; color: var(--muted); line-height: 1.2; }
+  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; flex: none; }
+  .lang button { font: inherit; font-size: .85rem; border: 0; background: transparent; color: var(--muted); padding: .3rem .65rem; border-radius: 999px; cursor: pointer; min-height: 2rem; }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+  .top .btn { display: none; }
+  @media (min-width: 52rem) { .top .btn { display: inline-flex; } }
+
+  /* Botones */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; font: inherit; font-weight: 700; text-decoration: none; border: 0; cursor: pointer; border-radius: 999px; padding: .75rem 1.3rem; min-height: 3rem; }
+  .btn svg { width: 1.25rem; height: 1.25rem; flex: none; }
+  .btn-primary { background: var(--sea); color: var(--white); }
+  .btn-primary:hover { background: var(--sea-deep); }
+  .btn-sun { background: var(--sun); color: var(--ink); }
+  .btn-sun:hover { background: #F7C25E; }
+  .btn-ghost { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,.7); }
+  .btn-ghost:hover { background: rgba(255,255,255,.12); }
+  .btn[disabled] { opacity: .6; cursor: progress; }
+
+  /* Portada con el formulario */
+  .hero { padding: 2.25rem 0 2.75rem; }
+  .hero .wrap { display: grid; gap: 2rem; }
+  @media (min-width: 52rem) {
+    .hero { padding: 3.25rem 0 3.75rem; }
+    .hero .wrap { grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: start; }
+  }
+  .eyebrow { display: inline-block; font-size: .85rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--sea-deep); background: var(--sea-soft); border-radius: 999px; padding: .25rem .75rem; margin: 0 0 1rem; }
+  h1 { font-size: clamp(2.05rem, 7vw, 3.35rem); line-height: 1.05; letter-spacing: -.025em; margin: 0 0 1rem; font-weight: 700; max-width: 16ch; text-wrap: balance; }
+  .lede { font-size: 1.18rem; color: var(--muted); margin: 0 0 1.75rem; max-width: 36rem; }
+  .form label { display: block; font-weight: 700; margin-bottom: .55rem; }
+  .field { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .field input { flex: 1 1 14rem; min-width: 0; font: inherit; font-size: 1.15rem; color: var(--ink); background: var(--white); border: 2px solid var(--line); border-radius: 999px; padding: .7rem 1.2rem; min-height: 3.3rem; }
+  .field input:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; border-color: var(--sea); }
+  .field .btn { flex: 0 0 auto; min-height: 3.3rem; padding: .75rem 1.6rem; font-size: 1.08rem; }
+  @media (max-width: 30rem) { .field .btn { flex: 1 1 100%; } }
+  .form-hint { font-size: .95rem; color: var(--muted); margin: .65rem 0 0; }
+  .try { font-size: .95rem; color: var(--muted); margin: .4rem 0 0; }
+  .try button { font: inherit; color: var(--sea-deep); background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-weight: 700; }
+
+  .panel { background: var(--sea); color: var(--white); border-radius: var(--radius-lg); padding: 1.35rem 1.35rem 1.25rem; }
+  @media (min-width: 52rem) { .panel { padding: 1.75rem; } }
+  .panel h2 { font-size: 1.3rem; margin: 0 0 .85rem; letter-spacing: 0; }
+  .panel ul { list-style: none; padding: 0; margin: 0 0 1.1rem; display: grid; gap: .55rem; }
+  .panel li { display: flex; gap: .65rem; align-items: baseline; }
+  .panel li::before { content: ""; width: .55rem; height: .55rem; border-radius: 50%; background: var(--sun); flex: none; transform: translateY(-.1rem); }
+  .panel li small { display: block; opacity: .82; font-size: .85rem; letter-spacing: .03em; }
+  .panel p { margin: 0; font-size: .95rem; opacity: .92; border-top: 1px solid rgba(255,255,255,.25); padding-top: .9rem; }
+
+  /* Resultado */
+  .results { padding: 0 0 3rem; }
+  .results[hidden] { display: none !important; }
+  .status-line { margin: 0 0 1rem; font-weight: 700; display: flex; align-items: center; gap: .6rem; }
+  .status-line.error { color: var(--bad); background: var(--bad-soft); padding: .9rem 1.1rem; border-radius: var(--radius-sm); font-weight: 400; }
+  .spinner { width: 1.1rem; height: 1.1rem; border-radius: 50%; border: 3px solid var(--sea-soft); border-top-color: var(--sea); animation: spin .8s linear infinite; flex: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .for { margin: 0 0 .6rem; color: var(--muted); }
+  .for b { color: var(--ink); overflow-wrap: anywhere; }
+
+  .verdict { display: grid; gap: 1.25rem; border-radius: var(--radius-lg); padding: 1.35rem; background: var(--white); border: 2px solid var(--line); }
+  @media (min-width: 46rem) { .verdict { grid-template-columns: 1fr 13rem; align-items: center; padding: 1.75rem; } }
+  .verdict[data-v="good"] { background: var(--ok-soft); border-color: #A9D3BB; }
+  .verdict[data-v="improve"] { background: var(--warn-soft); border-color: #EBC67A; }
+  .verdict[data-v="risk"] { background: var(--bad-soft); border-color: #E6A8A2; }
+  .verdict h2 { margin: 0 0 .35rem; font-size: clamp(1.8rem, 5vw, 2.4rem); line-height: 1.05; letter-spacing: -.02em; }
+  .verdict[data-v="good"] h2 { color: var(--ok); }
+  .verdict[data-v="improve"] h2 { color: var(--warn); }
+  .verdict[data-v="risk"] h2 { color: var(--bad); }
+  .verdict h2:focus { outline: none; }
+  .verdict p { margin: 0; max-width: 40rem; }
+  .verdict .prov { margin-top: .6rem; font-size: .98rem; color: var(--muted); }
+  .score { display: grid; gap: .35rem; }
+  .score .num { font-size: 3.2rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .score .num small { font-size: 1.1rem; font-weight: 400; color: var(--muted); margin-left: .15rem; }
+  .meter { height: .7rem; border-radius: 999px; background: rgba(19,40,63,.12); overflow: hidden; }
+  .meter span { display: block; height: 100%; border-radius: 999px; background: var(--ink); }
+  .verdict[data-v="good"] .meter span { background: var(--ok); }
+  .verdict[data-v="improve"] .meter span { background: var(--warn); }
+  .verdict[data-v="risk"] .meter span { background: var(--bad); }
+  .score .lab { font-size: .85rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+  .checks { margin-top: 1.5rem; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+  .check { padding: 1.2rem 1.25rem; border-top: 1px solid var(--line); }
+  .check:first-child { border-top: 0; }
+  @media (min-width: 46rem) { .check { padding: 1.35rem 1.75rem; } }
+  .check-head { display: flex; align-items: flex-start; gap: .75rem; justify-content: space-between; }
+  .check h3 { margin: 0; font-size: 1.15rem; line-height: 1.25; min-width: 0; }
+  .check h3 small { display: block; font-family: var(--mono); font-size: .8rem; font-weight: 400; color: var(--muted); letter-spacing: .02em; margin-top: .15rem; }
+  .pill { flex: none; display: inline-flex; align-items: center; gap: .4rem; font-size: .88rem; font-weight: 700; border-radius: 999px; padding: .3rem .75rem; white-space: nowrap; }
+  .pill::before { content: ""; width: .55rem; height: .55rem; border-radius: 50%; background: currentColor; }
+  .pill[data-s="ok"] { background: var(--ok-soft); color: var(--ok); }
+  .pill[data-s="warn"] { background: var(--warn-soft); color: var(--warn); }
+  .pill[data-s="bad"] { background: var(--bad-soft); color: var(--bad); }
+  .pill[data-s="info"], .pill[data-s="unknown"] { background: var(--info-soft); color: var(--info); }
+  .pill[data-s="unknown"]::before { background: transparent; border: 2px solid currentColor; width: .45rem; height: .45rem; }
+  .check > p { margin: .55rem 0 0; max-width: 46rem; }
+  .notes { margin: .5rem 0 0; padding-left: 1.2rem; color: var(--muted); font-size: 1rem; max-width: 46rem; }
+  .check details { margin-top: .7rem; max-width: 52rem; }
+  .check summary { cursor: pointer; font-weight: 700; font-size: .98rem; color: var(--sea-deep); width: fit-content; }
+  .check summary:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .fix-body { margin-top: .5rem; padding: .9rem 1rem; background: var(--paper); border-radius: var(--radius-sm); display: grid; gap: .6rem; }
+  .fix-body p { margin: 0; font-size: 1rem; }
+  .fix-body .where { color: var(--muted); font-size: .95rem; }
+  .code { display: flex; align-items: stretch; gap: .5rem; background: var(--ink); color: #E9F1F7; border-radius: 8px; padding: .25rem .25rem .25rem .8rem; }
+  .code code { flex: 1 1 auto; min-width: 0; font-family: var(--mono); font-size: .9rem; padding: .45rem 0; overflow-x: auto; white-space: pre; }
+  .code button { flex: none; font: inherit; font-size: .8rem; font-weight: 700; background: rgba(255,255,255,.12); color: var(--white); border: 0; border-radius: 6px; padding: 0 .7rem; cursor: pointer; }
+  .code button:hover { background: rgba(255,255,255,.22); }
+  pre.rec { margin: .5rem 0 0; font-family: var(--mono); font-size: .88rem; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: .7rem .85rem; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  .advanced { margin-top: 1.75rem; }
+  .advanced h3 { margin: 0; font-size: 1.1rem; }
+  .advanced > p { margin: .2rem 0 0; color: var(--muted); font-size: 1rem; }
+  .advanced .checks { margin-top: .8rem; }
+  .advanced .check h3 { font-size: 1.05rem; }
+
+  .cta { margin-top: 1.75rem; background: var(--sea); color: var(--white); border-radius: var(--radius-lg); padding: 1.35rem; display: grid; gap: 1rem; }
+  @media (min-width: 52rem) { .cta { grid-template-columns: 1fr auto; align-items: center; padding: 1.75rem 2rem; } }
+  .cta h2 { margin: 0 0 .35rem; font-size: 1.45rem; }
+  .cta p { margin: 0; max-width: 38rem; opacity: .95; }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+  @media (min-width: 52rem) { .cta-actions { flex-direction: column; align-items: stretch; min-width: 16rem; } }
+  .cta-actions .btn { flex: 1 1 auto; }
+  .copy-status { grid-column: 1 / -1; margin: 0; font-size: .95rem; min-height: 1.4em; }
+
+  /* Por qué importa */
+  .band { background: var(--white); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 3rem 0; }
+  @media (min-width: 52rem) { .band { padding: 4rem 0; } }
+  .band h2 { font-size: clamp(1.6rem, 4.5vw, 2.2rem); line-height: 1.1; letter-spacing: -.015em; margin: 0 0 1.5rem; }
+  .why { display: grid; gap: 1.5rem; list-style: none; padding: 0; margin: 0; }
+  @media (min-width: 52rem) { .why { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; } }
+  .why li { border-top: 3px solid var(--ink); padding-top: .8rem; }
+  .why li:first-child { border-top-color: var(--sun); }
+  .source { margin: 1.75rem 0 0; font-size: .95rem; color: var(--muted); }
+  .tech-note { margin: .35rem 0 0; font-size: .95rem; color: var(--muted); }
+
+  footer { background: var(--ink); color: #D7E2EC; padding: 3rem 0 2.5rem; }
+  footer .wrap { display: grid; gap: 1.5rem; }
+  @media (min-width: 52rem) { footer .wrap { grid-template-columns: 1fr auto; align-items: end; } }
+  footer b { color: var(--white); font-size: 1.2rem; display: block; margin-bottom: .25rem; }
+  footer a { color: var(--sun); }
+  footer p { margin: 0; }
+  .contact-lines { display: grid; gap: .35rem; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido" data-t="skip">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./">
+      <span class="mark" aria-hidden="true">DR</span>
+      <span class="brand-text"><b>David Rubio Informática</b><small data-t="brandSub">Soporte informático en remoto</small></span>
+    </a>
+    <div class="lang" role="group" aria-label="Idioma">
+      <button type="button" data-lang="es" aria-pressed="true">ES</button>
+      <button type="button" data-lang="ca" aria-pressed="false">CA</button>
+    </div>
+    <a class="btn btn-primary" id="head-wa" href="https://wa.me/34665546387" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.5 7.4L3 20.5l1.6-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
+      <span data-t="headerBtn">Escríbeme</span>
+    </a>
+  </div>
+</header>
+
+<main id="contenido">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow" data-t="eyebrow">Herramienta gratuita para negocios</p>
+        <h1 data-t="h1">¿Pueden suplantar el correo de tu negocio?</h1>
+        <p class="lede" data-t="lede">Escribe el dominio de tu negocio y en unos segundos sabrás si alguien podría enviar correos falsos en tu nombre y si tus correos tienen lo necesario para no acabar en spam.</p>
+        <form class="form" id="form" novalidate>
+          <label for="domain" data-t="formLabel">Dominio de tu negocio o tu correo</label>
+          <div class="field">
+            <input id="domain" name="domain" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="tunegocio.es">
+            <button class="btn btn-primary" id="go" type="submit" data-t="btnCheck">Revisar</button>
+          </div>
+          <p class="form-hint" data-t="formHint">Vale con «tunegocio.es» o con «info@tunegocio.es». No hace falta registrarse.</p>
+          <p class="try"><span data-t="tryLabel">¿Quieres ver un ejemplo? Prueba con</span> <button type="button" class="js-try" data-d="incibe.es">incibe.es</button></p>
+        </form>
+      </div>
+      <aside class="panel" aria-labelledby="what-h">
+        <h2 id="what-h" data-t="whatH">Qué miramos</h2>
+        <ul>
+          <li><span><span data-t="w1">Si otros pueden enviar correos haciéndose pasar por ti</span><small>DMARC</small></span></li>
+          <li><span><span data-t="w2">Qué servidores pueden enviar correo en tu nombre</span><small>SPF</small></span></li>
+          <li><span><span data-t="w3">Si tus correos salen firmados</span><small>DKIM</small></span></li>
+          <li><span><span data-t="w4">Quién gestiona tu correo</span><small>MX</small></span></li>
+        </ul>
+        <p data-t="panelNote">Solo leemos los registros públicos del dominio, los mismos que consulta Gmail cuando le llega un correo tuyo. No entramos en ningún sitio ni guardamos nada.</p>
+      </aside>
+    </div>
+  </div>
+
+  <section class="results" id="results" hidden aria-live="polite">
+    <div class="wrap" id="results-body"></div>
+  </section>
+
+  <section class="band" aria-labelledby="why-h">
+    <div class="wrap">
+      <h2 id="why-h" data-t="whyH">Por qué importa</h2>
+      <ul class="why">
+        <li data-t="why1">El phishing fue el fraude más frecuente que gestionó INCIBE en 2025, con más de 25.000 casos: correos que se hacen pasar por bancos, empresas o instituciones.</li>
+        <li data-t="why2">Si tu dominio no está protegido, un estafador puede escribir a tus clientes «desde» tu dirección, por ejemplo para pedirles que paguen una factura en otra cuenta.</li>
+        <li data-t="why3">Gmail, Yahoo y Outlook exigen estos registros a quien envía muchos correos, y a todos los demás les ayudan a no acabar en spam.</li>
+      </ul>
+      <p class="source" data-t="srcLine">Fuente: <a href='https://www.incibe.es/incibe/sala-de-prensa/incibe-detecto-mas-de-122000-incidentes-de-ciberseguridad-en-2025' target='_blank' rel='noopener'>balance de ciberseguridad 2025 de INCIBE</a>.</p>
+      <p class="tech-note" data-t="techNote">Las consultas se hacen a los DNS públicos de Google, y a los de Cloudflare si fallan.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <b>David Rubio Informática</b>
+      <p data-t="footSub">Soporte informático en remoto, y a domicilio en Badalona.</p>
+    </div>
+    <div class="contact-lines">
+      <p>WhatsApp: <a href="https://wa.me/34665546387" target="_blank" rel="noopener">665 54 63 87</a></p>
+      <p><span data-t="phone">Teléfono</span>: <a href="tel:+34665546387">665 54 63 87</a></p>
+      <p>Email: <a href="mailto:rubiosoriad@gmail.com">rubiosoriad@gmail.com</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/*CORE-START*/
+var CORE = (function () {
+  var T_TXT = 16, T_MX = 15, T_CNAME = 5;
+
+  var SELECTORS = ["google", "selector1", "selector2", "default", "dkim", "mail", "k1", "k2", "k3",
+    "s1", "s2", "s1-ionos", "s2-ionos", "zoho", "zmail", "sig1", "key1", "smtp", "mxvault",
+    "hostingermail1", "hostingermail2"];
+
+  var PROVIDERS = [
+    [/(^|\.)(google|googlemail)\.com$/, "Google Workspace", "google"],
+    [/(^|\.)(outlook\.com|office365\.com)$/, "Microsoft 365", "microsoft"],
+    [/(^|\.)(ionos\.[a-z.]+|1and1\.[a-z.]+|kundenserver\.de|perfora\.net)$/, "IONOS", "ionos"],
+    [/(^|\.)secureserver\.net$/, "GoDaddy", "godaddy"],
+    [/(^|\.)ovh\.net$/, "OVHcloud", "ovh"],
+    [/(^|\.)zoho\.(com|eu|in)$/, "Zoho Mail", "zoho"],
+    [/(^|\.)dinahosting\.com$/, "Dinahosting", "dinahosting"],
+    [/(^|\.)arsys\.es$/, "Arsys", "arsys"],
+    [/(^|\.)hostinger\.com$/, "Hostinger", "hostinger"],
+    [/(^|\.)cdmon\.(com|net)$/, "cdmon", "cdmon"],
+    [/(^|\.)raiolanetworks\.(es|com)$/, "Raiola Networks", "raiola"],
+    [/(^|\.)strato\.(de|com|es)$/, "Strato", "strato"],
+    [/(^|\.)messagingengine\.com$/, "Fastmail", "fastmail"],
+    [/(^|\.)icloud\.com$/, "iCloud", "icloud"],
+    [/(^|\.)mimecast\.com$/, "Mimecast", "mimecast"],
+    [/(^|\.)pphosted\.com$/, "Proofpoint", "proofpoint"],
+    [/(^|\.)barracudanetworks\.com$/, "Barracuda", "barracuda"]
+  ];
+
+  function assign(a, b) { for (var k in b) if (Object.prototype.hasOwnProperty.call(b, k)) a[k] = b[k]; return a; }
+
+  function normalizeDomain(input) {
+    if (input === null || input === undefined) return null;
+    var s = String(input).trim().toLowerCase();
+    if (!s) return null;
+    var at = s.lastIndexOf("@");
+    if (at !== -1) s = s.slice(at + 1);
+    s = s.replace(/^[a-z][a-z0-9+.-]*:\/\//, "");
+    s = s.split(/[\/?#\s]/)[0];
+    s = s.replace(/:\d+$/, "").replace(/\.+$/, "").replace(/^www\./, "");
+    if (!s) return null;
+    try { s = new URL("http://" + s).hostname; } catch (e) { return null; }
+    if (!/^(?=.{1,253}$)([a-z0-9-]{1,63}\.)+[a-z0-9-]{2,63}$/.test(s)) return null;
+    var labels = s.split(".");
+    for (var i = 0; i < labels.length; i++) {
+      if (labels[i].charAt(0) === "-" || labels[i].charAt(labels[i].length - 1) === "-") return null;
+    }
+    if (!/[a-z]/.test(labels[labels.length - 1])) return null;
+    return s;
+  }
+
+  function txtValue(data) {
+    if (typeof data !== "string") return "";
+    var d = data.trim();
+    if (d.charAt(0) !== '"') return d;
+    var out = "", re = /"((?:[^"\\]|\\.)*)"/g, m;
+    while ((m = re.exec(d))) out += m[1].replace(/\\(\d{3})/g, function (_, n) { return String.fromCharCode(parseInt(n, 10)); }).replace(/\\(.)/g, "$1");
+    return out;
+  }
+
+  function answersOf(resp, type) {
+    if (!resp || !resp.Answer) return [];
+    return resp.Answer.filter(function (a) { return a && a.type === type; });
+  }
+
+  function txtsOf(resp) {
+    return answersOf(resp, T_TXT).map(function (a) { return txtValue(a.data); });
+  }
+
+  function detectProvider(host) {
+    for (var i = 0; i < PROVIDERS.length; i++) {
+      if (PROVIDERS[i][0].test(host)) return { name: PROVIDERS[i][1], id: PROVIDERS[i][2] };
+    }
+    return null;
+  }
+
+  function analyzeMx(resp) {
+    var hosts = answersOf(resp, T_MX).map(function (a) {
+      var parts = String(a.data).trim().split(/\s+/);
+      return { pref: parseInt(parts[0], 10) || 0, host: (parts[1] || "").replace(/\.$/, "").toLowerCase() };
+    }).sort(function (a, b) { return a.pref - b.pref; });
+    if (!hosts.length) return { key: "mx", status: "info", code: "mx_none", hosts: [], hasMail: false };
+    if (hosts.length === 1 && hosts[0].host === "") return { key: "mx", status: "info", code: "mx_null", hosts: [], hasMail: false };
+    var prov = detectProvider(hosts[0].host);
+    return { key: "mx", status: "info", code: "mx_found", hosts: hosts, hasMail: true,
+      provider: prov ? prov.name : null, providerId: prov ? prov.id : null };
+  }
+
+  function analyzeSpf(resp) {
+    var recs = txtsOf(resp).filter(function (t) { return /^v=spf1(\s|$)/i.test(t.trim()); });
+    if (!recs.length) return { key: "spf", status: "bad", code: "spf_missing", records: [], notes: [] };
+    if (recs.length > 1) return { key: "spf", status: "bad", code: "spf_multiple", n: recs.length, records: recs, notes: [] };
+    var rec = recs[0].trim();
+    var terms = rec.split(/\s+/).slice(1);
+    var lookups = 0, allQ = null, redirect = false, ptr = false;
+    terms.forEach(function (t) {
+      var lt = t.toLowerCase(), q = "+";
+      if (/^[+\-~?]/.test(lt)) { q = lt.charAt(0); lt = lt.slice(1); }
+      if (lt === "all") { allQ = q; return; }
+      if (/^redirect=/.test(lt)) { redirect = true; lookups++; return; }
+      if (/^(include|exists):/.test(lt)) { lookups++; return; }
+      if (/^(a|mx)([:\/]|$)/.test(lt)) { lookups++; return; }
+      if (/^ptr([:\/]|$)/.test(lt)) { lookups++; ptr = true; }
+    });
+    var notes = [];
+    if (ptr) notes.push({ code: "note_ptr" });
+    var base = { key: "spf", records: [rec], lookups: lookups, notes: notes };
+    if (lookups > 10) return assign(base, { status: "bad", code: "spf_toomany", n: lookups });
+    if (lookups >= 8) notes.push({ code: "note_near", n: lookups });
+    if (allQ === "+") return assign(base, { status: "bad", code: "spf_plusall" });
+    if (allQ === "?") return assign(base, { status: "warn", code: "spf_neutral" });
+    if (allQ === "-") return assign(base, { status: "ok", code: "spf_hard" });
+    if (allQ === "~") return assign(base, { status: "ok", code: "spf_soft" });
+    if (redirect) return assign(base, { status: "ok", code: "spf_redirect" });
+    return assign(base, { status: "warn", code: "spf_noall" });
+  }
+
+  function analyzeDmarc(resp) {
+    var recs = txtsOf(resp).filter(function (t) { return /^v=dmarc1\s*(;|$)/i.test(t.trim()); });
+    if (!recs.length) return { key: "dmarc", status: "bad", code: "dmarc_missing", records: [], notes: [] };
+    if (recs.length > 1) return { key: "dmarc", status: "bad", code: "dmarc_multiple", n: recs.length, records: recs, notes: [] };
+    var rec = recs[0].trim(), tags = {};
+    rec.split(";").forEach(function (part) {
+      var i = part.indexOf("=");
+      if (i === -1) return;
+      var k = part.slice(0, i).trim().toLowerCase(), v = part.slice(i + 1).trim();
+      if (k && !Object.prototype.hasOwnProperty.call(tags, k)) tags[k] = v;
+    });
+    var p = (tags.p || "").toLowerCase();
+    var notes = [];
+    var base = { key: "dmarc", records: [rec], tags: tags, notes: notes };
+    if (["none", "quarantine", "reject"].indexOf(p) === -1) return assign(base, { status: "bad", code: "dmarc_invalid" });
+    if (tags.pct !== undefined && p !== "none") {
+      var pct = parseInt(tags.pct, 10);
+      if (!isNaN(pct) && pct < 100) notes.push({ code: "note_pct", pct: pct });
+    }
+    if (!tags.rua) notes.push({ code: "note_norua" });
+    if (p !== "none" && (tags.sp || "").toLowerCase() === "none") notes.push({ code: "note_spnone" });
+    return assign(base, { status: p === "none" ? "warn" : "ok", code: "dmarc_" + p, policy: p });
+  }
+
+  function analyzeDkim(results, hasMail) {
+    var found = [], cname = [];
+    (results || []).forEach(function (r) {
+      if (!r || !r.resp) return;
+      var keys = txtsOf(r.resp).filter(function (t) {
+        return /(^|;)p=[A-Za-z0-9+\/]{20,}/.test(t.replace(/\s+/g, ""));
+      });
+      if (keys.length) found.push(r.selector);
+      else if (answersOf(r.resp, T_CNAME).length) cname.push(r.selector);
+    });
+    if (found.length) return { key: "dkim", status: "ok", code: "dkim_found", selectors: found };
+    if (cname.length) return { key: "dkim", status: "warn", code: "dkim_cname", selectors: cname };
+    if (!hasMail) return { key: "dkim", status: "info", code: "dkim_na", selectors: [] };
+    return { key: "dkim", status: "unknown", code: "dkim_notfound", selectors: [] };
+  }
+
+  function analyzeDnssec(resp) {
+    return resp && resp.AD === true
+      ? { key: "dnssec", status: "ok", code: "dnssec_on" }
+      : { key: "dnssec", status: "info", code: "dnssec_off" };
+  }
+
+  function analyzeMtaSts(resp) {
+    var on = txtsOf(resp).some(function (t) { return /^v=stsv1\s*(;|$)/i.test(t.trim()); });
+    return on ? { key: "mtasts", status: "ok", code: "mtasts_on" } : { key: "mtasts", status: "info", code: "mtasts_off" };
+  }
+
+  function scoreOf(c) {
+    var s = 0;
+    s += ({ dmarc_reject: 40, dmarc_quarantine: 32, dmarc_none: 12 })[c.dmarc.code] || 0;
+    s += ({ spf_hard: 30, spf_soft: 30, spf_redirect: 26, spf_neutral: 12, spf_noall: 12 })[c.spf.code] || 0;
+    s += ({ dkim_found: 20, dkim_na: 20, dkim_cname: 10, dkim_notfound: 6 })[c.dkim.code] || 0;
+    if (c.dnssec.status === "ok") s += 5;
+    if (c.mtasts.status === "ok") s += 5;
+    return s;
+  }
+
+  function verdictOf(c) {
+    if (c.dmarc.status === "bad" || c.spf.status === "bad") return "risk";
+    if (c.dmarc.status === "warn" || c.spf.status === "warn") return "improve";
+    if (c.dkim.code !== "dkim_found" && c.dkim.code !== "dkim_na") return "improve";
+    return "good";
+  }
+
+  function evaluate(domain, raw) {
+    var mx = analyzeMx(raw.mx);
+    var checks = {
+      mx: mx,
+      spf: analyzeSpf(raw.txt),
+      dmarc: analyzeDmarc(raw.dmarc),
+      dkim: analyzeDkim(raw.dkim, mx.hasMail),
+      dnssec: analyzeDnssec(raw.mx),
+      mtasts: analyzeMtaSts(raw.mtasts)
+    };
+    var score = scoreOf(checks);
+    return { domain: domain, checks: checks, score: score, verdict: verdictOf(checks),
+      hasMail: mx.hasMail, provider: mx.provider, providerId: mx.providerId, checkedAt: new Date().toISOString() };
+  }
+
+  return { SELECTORS: SELECTORS, normalizeDomain: normalizeDomain, txtValue: txtValue, detectProvider: detectProvider,
+    analyzeMx: analyzeMx, analyzeSpf: analyzeSpf, analyzeDmarc: analyzeDmarc, analyzeDkim: analyzeDkim,
+    analyzeDnssec: analyzeDnssec, analyzeMtaSts: analyzeMtaSts, scoreOf: scoreOf, verdictOf: verdictOf, evaluate: evaluate };
+})();
+/*CORE-END*/
+
+(function () {
+  var PHONE = "34665546387";
+  var TECH = { dmarc: "DMARC", spf: "SPF", dkim: "DKIM", mx: "MX", dnssec: "DNSSEC", mtasts: "MTA-STS" };
+  var MAIN = ["dmarc", "spf", "dkim", "mx"];
+  var EXTRA = ["dnssec", "mtasts"];
+
+  /* Textos fijos de la página en catalán (el castellano se lee del propio HTML) */
+  var CA = {
+    skip: "Salta al contingut",
+    brandSub: "Suport informàtic en remot",
+    headerBtn: "Escriu-me",
+    eyebrow: "Eina gratuïta per a negocis",
+    h1: "Poden suplantar el correu del teu negoci?",
+    lede: "Escriu el domini del teu negoci i en uns segons sabràs si algú podria enviar correus falsos en nom teu i si els teus correus tenen el que cal per no acabar al correu brossa.",
+    formLabel: "Domini del teu negoci o el teu correu",
+    btnCheck: "Revisa",
+    formHint: "Serveix «elteunegoci.cat» o «info@elteunegoci.cat». No cal registrar-se.",
+    tryLabel: "Vols veure un exemple? Prova amb",
+    whatH: "Què mirem",
+    w1: "Si altres poden enviar correus fent-se passar per tu",
+    w2: "Quins servidors poden enviar correu en nom teu",
+    w3: "Si els teus correus surten signats",
+    w4: "Qui gestiona el teu correu",
+    panelNote: "Només llegim els registres públics del domini, els mateixos que consulta Gmail quan li arriba un correu teu. No entrem enlloc ni desem res.",
+    whyH: "Per què és important",
+    why1: "El phishing va ser el frau més freqüent que va gestionar l'INCIBE el 2025, amb més de 25.000 casos: correus que es fan passar per bancs, empreses o institucions.",
+    why2: "Si el teu domini no està protegit, un estafador pot escriure als teus clients «des de» la teva adreça, per exemple per demanar-los que paguin una factura en un altre compte.",
+    why3: "Gmail, Yahoo i Outlook exigeixen aquests registres a qui envia molts correus, i a tots els altres els ajuden a no acabar al correu brossa.",
+    srcLine: "Font: <a href='https://www.incibe.es/incibe/sala-de-prensa/incibe-detecto-mas-de-122000-incidentes-de-ciberseguridad-en-2025' target='_blank' rel='noopener'>balanç de ciberseguretat 2025 de l'INCIBE</a>.",
+    techNote: "Les consultes es fan als DNS públics de Google, i als de Cloudflare si fallen.",
+    footSub: "Suport informàtic en remot, i a domicili a Badalona.",
+    phone: "Telèfon"
+  };
+
+  /* Textos del resultado */
+  var D = {
+    es: {
+      placeholder: "tunegocio.es",
+      loading: "Consultando los registros públicos de {d}…",
+      errInvalid: "Eso no parece un dominio. Escribe solo lo que va después de la @, por ejemplo tunegocio.es.",
+      errNx: "No existe ningún dominio llamado {d}. Revisa que esté bien escrito.",
+      errNet: "No hemos podido consultar los DNS. Revisa tu conexión y vuelve a intentarlo.",
+      errDns: "El dominio {d} responde con errores de DNS. Puede estar mal configurado o caducado.",
+      resultFor: "Resultado para",
+      verdict_good: "Bien protegido", verdict_improve: "Mejorable", verdict_risk: "En riesgo",
+      sum_good: "Tu dominio tiene las protecciones básicas activadas. Cuesta mucho enviar correos falsos en tu nombre.",
+      sum_improve: "Tiene parte de la protección, pero quedan huecos que conviene cerrar.",
+      sum_risk: "Ahora mismo alguien podría enviar correos haciéndose pasar por tu negocio, y tus correos tienen más papeletas de acabar en spam.",
+      scoreLabel: "Nota sobre 100",
+      provider: "Tu correo lo gestiona: {p}",
+      providerHost: "Servidor de correo: {p}",
+      pill_ok: "Bien", pill_warn: "Mejorable", pill_bad: "Riesgo", pill_info: "Información", pill_unknown: "Sin confirmar",
+      n_dmarc: "Protección contra suplantación", n_spf: "Servidores autorizados a enviar", n_dkim: "Firma de tus correos",
+      n_mx: "Quién recibe tu correo", n_dnssec: "Firma del dominio", n_mtasts: "Cifrado al recibir correo",
+      advancedH: "Extras avanzados",
+      advancedP: "Para un negocio pequeño suman poco, pero las grandes empresas los usan.",
+      dmarc_missing: "No tienes DMARC. Es el registro que dice a Gmail, Outlook y compañía qué hacer con un correo que dice ser de {d} y no lo es. Sin él, lo normal es que lo entreguen.",
+      dmarc_multiple: "Hay {n} registros DMARC y solo puede haber uno. Con varios, los servidores los ignoran todos.",
+      dmarc_invalid: "Hay un registro DMARC, pero le falta la política (p=) y no sirve.",
+      dmarc_none: "Tienes DMARC en modo «solo vigilar» (p=none). Sirve para recibir informes, pero los correos falsos en tu nombre se siguen entregando.",
+      dmarc_quarantine: "Los correos falsos en tu nombre van a la carpeta de spam (p=quarantine). El último paso sería rechazarlos del todo.",
+      dmarc_reject: "Los correos falsos en tu nombre se rechazan (p=reject). Es la protección máxima.",
+      note_pct: "Solo se aplica al {pct} % de los correos (pct={pct}).",
+      note_norua: "No recibes informes (falta rua=), así que no sabes quién envía en tu nombre.",
+      note_spnone: "Los subdominios no están protegidos (sp=none).",
+      spf_missing: "No tienes SPF, la lista de servidores que pueden enviar correos de {d}. Sin ella es más fácil suplantarte y tus correos van más al spam.",
+      spf_multiple: "Hay {n} registros SPF y solo puede haber uno. Con varios, el SPF da error y no protege.",
+      spf_plusall: "Tu SPF acaba en +all: deja enviar a cualquier servidor del mundo. Es como no tenerlo.",
+      spf_neutral: "Tu SPF acaba en ?all, que no dice nada sobre los servidores que no están en la lista.",
+      spf_noall: "Tu SPF no indica qué hacer con los servidores que no están en la lista (falta -all o ~all).",
+      spf_toomany: "Tu SPF necesita al menos {n} consultas DNS y el máximo son 10. Por encima, falla.",
+      spf_soft: "Tienes SPF y marca como sospechosos los correos de otros servidores (~all). Junto con DMARC, es correcto.",
+      spf_hard: "Tienes SPF y rechaza los correos de servidores que no están en la lista (-all).",
+      spf_redirect: "Tu SPF delega en el de otro dominio (redirect=).",
+      note_ptr: "Usa «ptr», un mecanismo obsoleto que conviene quitar.",
+      note_near: "Usa al menos {n} de las 10 consultas permitidas; vigílalo si añades servicios.",
+      dkim_found: "Tus correos salen firmados. Hemos encontrado la clave con el selector «{s}».",
+      dkim_cname: "La firma está preparada en el DNS ({s}), pero no hemos encontrado la clave final. Puede que no esté activada en tu proveedor.",
+      dkim_notfound: "No hemos encontrado la firma con los nombres habituales. Puede que use otro nombre, así que no es seguro que falte: se confirma mirando un correo enviado desde el dominio.",
+      dkim_na: "Este dominio no recibe correo, y si tampoco envía, la firma no hace falta.",
+      mx_found: "Recibe el correo a través de {p}.",
+      mx_none: "Este dominio no tiene servidores de correo, así que no recibe emails. Aun así conviene protegerlo para que nadie lo use para enviar correos falsos.",
+      mx_null: "El dominio indica expresamente que no usa correo (MX nulo).",
+      dnssec_on: "El dominio está firmado (DNSSEC): es más difícil falsificar sus respuestas DNS.",
+      dnssec_off: "El dominio no tiene DNSSEC. Es una protección extra que depende de que tu proveedor de dominio la ofrezca.",
+      mtasts_on: "Exige conexiones cifradas a quien te envía correo (MTA-STS).",
+      mtasts_off: "No tiene MTA-STS, una protección extra para obligar a cifrar el correo entrante. Casi ningún negocio pequeño la usa.",
+      recordH: "Registro actual", fixH: "Cómo se arregla", copy: "Copiar",
+      fix_dmarc_missing: "Añade en el DNS un registro TXT con el nombre _dmarc. Empieza en modo vigilancia para recibir informes (cambia la dirección por una que leas):",
+      fix_dmarc_missing2: "Cuando los informes muestren que todos tus correos legítimos pasan, sube a p=quarantine y después a p=reject.",
+      fix_dmarc_missing_nomail: "Si este dominio no envía correo, puedes bloquearlo directamente con un registro TXT en _dmarc:",
+      fix_dmarc_none: "Revisa los informes para comprobar que tus correos legítimos pasan SPF y DKIM, y cambia p=none por p=quarantine. Unas semanas después, por p=reject.",
+      fix_dmarc_quarantine: "Cuando lleves unas semanas sin falsos positivos, cambia p=quarantine por p=reject.",
+      fix_dmarc_multiple: "Deja un solo registro TXT en _dmarc y borra el resto.",
+      fix_dmarc_invalid: "Añade la política al registro, por ejemplo p=none para empezar.",
+      fix_spf_missing: "Añade en el dominio un registro TXT con los servicios que envían tu correo.",
+      fix_spf_google: "Con Google Workspace suele ser:",
+      fix_spf_ms: "Con Microsoft 365 suele ser:",
+      fix_spf_nomail: "Si el dominio no envía correo:",
+      fix_spf_other: "Tu proveedor de correo indica qué «include» poner, y hay que sumar los demás servicios que envían en tu nombre (tienda online, boletín, facturas…).",
+      fix_spf_multiple: "Junta todos los registros en uno solo que empiece por v=spf1 y acabe en ~all o -all.",
+      fix_spf_all: "Termina el registro en ~all (o en -all si estás seguro de que la lista está completa).",
+      fix_spf_toomany: "Quita los servicios que ya no uses o sustituye algún «include» por las IP del servicio.",
+      fix_dkim: "Se activa en el panel de administración de tu proveedor de correo: te da un registro para añadir en el DNS y empieza a firmar.",
+      fix_where: "Los registros se cambian en el panel de quien te vende el dominio (IONOS, Arsys, Dinahosting, GoDaddy…). Si no sabes entrar, te lo hago yo.",
+      cta_h_fix: "¿Te lo dejo bien configurado?",
+      cta_p_fix: "Lo reviso contigo, añado los registros que faltan y vigilo los informes hasta dejarlo en protección máxima. Desde 40 €, con precio cerrado antes de empezar.",
+      cta_h_good: "Todo en orden",
+      cta_p_good: "Si quieres, lo vigilo cada mes junto al resto del soporte de tu negocio y te aviso si algo cambia.",
+      cta_wa_fix: "Pedir ayuda por WhatsApp", cta_wa_good: "Escríbeme por WhatsApp",
+      copyReport: "Copiar informe", copyLink: "Copiar enlace al resultado",
+      copied: "Copiado.", copyFail: "No se ha podido copiar. Selecciona el texto a mano.",
+      wa_fix: "Hola David, he revisado el correo de {d} en tu web y sale «{v}» ({s}/100). Falla: {list}. ¿Me ayudas a arreglarlo?",
+      wa_good: "Hola David, he revisado el correo de {d} en tu web y sale «{v}» ({s}/100). Me interesa que lo vigiles cada mes.",
+      report_title: "Revisión del correo de {d} ({date})",
+      report_result: "Resultado: {v} ({s}/100)",
+      report_by: "Revisado con la herramienta de David Rubio Informática: {url}"
+    },
+    ca: {
+      placeholder: "elteunegoci.cat",
+      loading: "Consultant els registres públics de {d}…",
+      errInvalid: "Això no sembla un domini. Escriu només el que va després de l'@, per exemple elteunegoci.cat.",
+      errNx: "No existeix cap domini anomenat {d}. Comprova que estigui ben escrit.",
+      errNet: "No hem pogut consultar els DNS. Comprova la connexió i torna-ho a provar.",
+      errDns: "El domini {d} respon amb errors de DNS. Pot estar mal configurat o caducat.",
+      resultFor: "Resultat per a",
+      verdict_good: "Ben protegit", verdict_improve: "Millorable", verdict_risk: "En risc",
+      sum_good: "El teu domini té les proteccions bàsiques activades. Costa molt enviar correus falsos en nom teu.",
+      sum_improve: "Té part de la protecció, però queden forats que convé tancar.",
+      sum_risk: "Ara mateix algú podria enviar correus fent-se passar pel teu negoci, i els teus correus tenen més números d'acabar al correu brossa.",
+      scoreLabel: "Nota sobre 100",
+      provider: "El teu correu el gestiona: {p}",
+      providerHost: "Servidor de correu: {p}",
+      pill_ok: "Bé", pill_warn: "Millorable", pill_bad: "Risc", pill_info: "Informació", pill_unknown: "Sense confirmar",
+      n_dmarc: "Protecció contra la suplantació", n_spf: "Servidors autoritzats a enviar", n_dkim: "Signatura dels teus correus",
+      n_mx: "Qui rep el teu correu", n_dnssec: "Signatura del domini", n_mtasts: "Xifratge en rebre correu",
+      advancedH: "Extres avançats",
+      advancedP: "Per a un negoci petit no sumen gaire, però les grans empreses els fan servir.",
+      dmarc_missing: "No tens DMARC. És el registre que diu a Gmail, Outlook i companyia què han de fer amb un correu que diu ser de {d} i no ho és. Sense ell, el normal és que l'entreguin.",
+      dmarc_multiple: "Hi ha {n} registres DMARC i només n'hi pot haver un. Amb diversos, els servidors els ignoren tots.",
+      dmarc_invalid: "Hi ha un registre DMARC, però li falta la política (p=) i no serveix.",
+      dmarc_none: "Tens DMARC en mode «només vigilar» (p=none). Serveix per rebre informes, però els correus falsos en nom teu s'entreguen igualment.",
+      dmarc_quarantine: "Els correus falsos en nom teu van a la carpeta de correu brossa (p=quarantine). L'últim pas seria rebutjar-los del tot.",
+      dmarc_reject: "Els correus falsos en nom teu es rebutgen (p=reject). És la protecció màxima.",
+      note_pct: "Només s'aplica al {pct} % dels correus (pct={pct}).",
+      note_norua: "No reps informes (falta rua=), així que no saps qui envia en nom teu.",
+      note_spnone: "Els subdominis no estan protegits (sp=none).",
+      spf_missing: "No tens SPF, la llista de servidors que poden enviar correus de {d}. Sense ella és més fàcil suplantar-te i els teus correus van més al correu brossa.",
+      spf_multiple: "Hi ha {n} registres SPF i només n'hi pot haver un. Amb diversos, l'SPF dona error i no protegeix.",
+      spf_plusall: "El teu SPF acaba en +all: deixa enviar qualsevol servidor del món. És com no tenir-lo.",
+      spf_neutral: "El teu SPF acaba en ?all, que no diu res dels servidors que no són a la llista.",
+      spf_noall: "El teu SPF no indica què cal fer amb els servidors que no són a la llista (falta -all o ~all).",
+      spf_toomany: "El teu SPF necessita com a mínim {n} consultes DNS i el màxim són 10. Per sobre, falla.",
+      spf_soft: "Tens SPF i marca com a sospitosos els correus d'altres servidors (~all). Amb DMARC, és correcte.",
+      spf_hard: "Tens SPF i rebutja els correus de servidors que no són a la llista (-all).",
+      spf_redirect: "El teu SPF delega en el d'un altre domini (redirect=).",
+      note_ptr: "Fa servir «ptr», un mecanisme obsolet que convé treure.",
+      note_near: "Fa servir com a mínim {n} de les 10 consultes permeses; vigila-ho si hi afegeixes serveis.",
+      dkim_found: "Els teus correus surten signats. Hem trobat la clau amb el selector «{s}».",
+      dkim_cname: "La signatura està preparada al DNS ({s}), però no hem trobat la clau final. Potser no està activada al teu proveïdor.",
+      dkim_notfound: "No hem trobat la signatura amb els noms habituals. Pot ser que en faci servir un altre, així que no és segur que falti: es confirma mirant un correu enviat des del domini.",
+      dkim_na: "Aquest domini no rep correu, i si tampoc n'envia, la signatura no cal.",
+      mx_found: "Rep el correu a través de {p}.",
+      mx_none: "Aquest domini no té servidors de correu, així que no rep emails. Tot i així convé protegir-lo perquè ningú el faci servir per enviar correus falsos.",
+      mx_null: "El domini indica expressament que no fa servir correu (MX nul).",
+      dnssec_on: "El domini està signat (DNSSEC): és més difícil falsificar les seves respostes DNS.",
+      dnssec_off: "El domini no té DNSSEC. És una protecció extra que depèn que el proveïdor del domini l'ofereixi.",
+      mtasts_on: "Exigeix connexions xifrades a qui t'envia correu (MTA-STS).",
+      mtasts_off: "No té MTA-STS, una protecció extra per obligar a xifrar el correu entrant. Gairebé cap negoci petit no la fa servir.",
+      recordH: "Registre actual", fixH: "Com s'arregla", copy: "Copia",
+      fix_dmarc_missing: "Afegeix al DNS un registre TXT amb el nom _dmarc. Comença en mode vigilància per rebre informes (canvia l'adreça per una que llegeixis):",
+      fix_dmarc_missing2: "Quan els informes mostrin que tots els teus correus legítims passen, puja a p=quarantine i després a p=reject.",
+      fix_dmarc_missing_nomail: "Si aquest domini no envia correu, el pots bloquejar directament amb un registre TXT a _dmarc:",
+      fix_dmarc_none: "Revisa els informes per comprovar que els teus correus legítims passen SPF i DKIM, i canvia p=none per p=quarantine. Unes setmanes després, per p=reject.",
+      fix_dmarc_quarantine: "Quan portis unes setmanes sense falsos positius, canvia p=quarantine per p=reject.",
+      fix_dmarc_multiple: "Deixa un sol registre TXT a _dmarc i esborra la resta.",
+      fix_dmarc_invalid: "Afegeix la política al registre, per exemple p=none per començar.",
+      fix_spf_missing: "Afegeix al domini un registre TXT amb els serveis que envien el teu correu.",
+      fix_spf_google: "Amb Google Workspace sol ser:",
+      fix_spf_ms: "Amb Microsoft 365 sol ser:",
+      fix_spf_nomail: "Si el domini no envia correu:",
+      fix_spf_other: "El teu proveïdor de correu indica quin «include» cal posar, i s'hi han de sumar els altres serveis que envien en nom teu (botiga en línia, butlletí, factures…).",
+      fix_spf_multiple: "Ajunta tots els registres en un de sol que comenci per v=spf1 i acabi en ~all o -all.",
+      fix_spf_all: "Acaba el registre en ~all (o en -all si estàs segur que la llista és completa).",
+      fix_spf_toomany: "Treu els serveis que ja no facis servir o substitueix algun «include» per les IP del servei.",
+      fix_dkim: "S'activa al tauler d'administració del teu proveïdor de correu: et dona un registre per afegir al DNS i comença a signar.",
+      fix_where: "Els registres es canvien al tauler de qui et ven el domini (IONOS, Arsys, Dinahosting, GoDaddy…). Si no saps com entrar-hi, t'ho faig jo.",
+      cta_h_fix: "T'ho deixo ben configurat?",
+      cta_p_fix: "Ho reviso amb tu, afegeixo els registres que falten i vigilo els informes fins a deixar-ho en protecció màxima. Des de 40 €, amb preu tancat abans de començar.",
+      cta_h_good: "Tot en ordre",
+      cta_p_good: "Si vols, t'ho vigilo cada mes amb la resta del suport del teu negoci i t'aviso si alguna cosa canvia.",
+      cta_wa_fix: "Demana ajuda per WhatsApp", cta_wa_good: "Escriu-me per WhatsApp",
+      copyReport: "Copia l'informe", copyLink: "Copia l'enllaç al resultat",
+      copied: "Copiat.", copyFail: "No s'ha pogut copiar. Selecciona el text a mà.",
+      wa_fix: "Hola David, he revisat el correu de {d} a la teva web i surt «{v}» ({s}/100). Falla: {list}. M'ajudes a arreglar-ho?",
+      wa_good: "Hola David, he revisat el correu de {d} a la teva web i surt «{v}» ({s}/100). M'interessa que me'l vigilis cada mes.",
+      report_title: "Revisió del correu de {d} ({date})",
+      report_result: "Resultat: {v} ({s}/100)",
+      report_by: "Revisat amb l'eina de David Rubio Informàtica: {url}"
+    }
+  };
+
+  var lang = "es";
+  var last = null;      /* último resultado */
+  var lastError = null; /* último error, para traducirlo si cambia el idioma */
+  var running = false;
+
+  var form = document.getElementById("form");
+  var input = document.getElementById("domain");
+  var go = document.getElementById("go");
+  var results = document.getElementById("results");
+  var body = document.getElementById("results-body");
+  var nodes = document.querySelectorAll("[data-t]");
+  var ES = {};
+  nodes.forEach(function (n) { ES[n.getAttribute("data-t")] = n.innerHTML; });
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function txt(key, vars) {
+    var s = D[lang][key];
+    if (s === undefined) s = D.es[key] || key;
+    return s.replace(/\{(\w+)\}/g, function (_, k) { return vars && vars[k] !== undefined ? String(vars[k]) : ""; });
+  }
+  function html(key, vars) {
+    var s = D[lang][key];
+    if (s === undefined) s = D.es[key] || key;
+    return esc(s).replace(/\{(\w+)\}/g, function (_, k) { return vars && vars[k] !== undefined ? esc(vars[k]) : ""; });
+  }
+
+  /* ---------- Consultas DNS (DNS sobre HTTPS) ---------- */
+  var ENDPOINTS = [
+    function (n, t) { return "https://dns.google/resolve?name=" + encodeURIComponent(n) + "&type=" + t; },
+    function (n, t) { return "https://cloudflare-dns.com/dns-query?name=" + encodeURIComponent(n) + "&type=" + t; }
+  ];
+
+  function dohFetch(i, name, type) {
+    var ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 8000);
+    return fetch(ENDPOINTS[i](name, type), { headers: { accept: "application/dns-json" }, signal: ctrl ? ctrl.signal : undefined })
+      .then(function (res) {
+        clearTimeout(timer);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (j) {
+        if (!j || typeof j.Status !== "number") throw new Error("Respuesta no válida");
+        return j;
+      }, function (e) { clearTimeout(timer); throw e; });
+  }
+
+  function query(name, type) {
+    return dohFetch(0, name, type)
+      .then(function (j) {
+        if (j.Status === 2) return dohFetch(1, name, type).catch(function () { return j; });
+        return j;
+      })
+      .catch(function () { return dohFetch(1, name, type); })
+      .catch(function () { return null; });
+  }
+
+  function gather(d) {
+    return Promise.all([query(d, "MX"), query(d, "TXT"), query("_dmarc." + d, "TXT"), query("_mta-sts." + d, "TXT")])
+      .then(function (base) {
+        if (base.every(function (x) { return x === null; })) throw { code: "errNet" };
+        var mx = base[0], tx = base[1];
+        if ((mx && mx.Status === 3) || (!mx && tx && tx.Status === 3)) throw { code: "errNx" };
+        if (mx && mx.Status === 2 && (!tx || tx.Status === 2)) throw { code: "errDns" };
+        return Promise.all(CORE.SELECTORS.map(function (s) {
+          return query(s + "._domainkey." + d, "TXT").then(function (resp) { return { selector: s, resp: resp }; });
+        })).then(function (dk) {
+          return { mx: mx, txt: tx, dmarc: base[2], mtasts: base[3], dkim: dk };
+        });
+      });
+  }
+
+  /* ---------- Pintar el resultado ---------- */
+  function pillOf(c) { return c.status; }
+
+  function codeBlock(value) {
+    return '<div class="code"><code>' + esc(value) + '</code><button type="button" class="js-copy" data-copy="' + esc(value) + '">' + html("copy") + '</button></div>';
+  }
+  function para(key, vars, cls) { return '<p' + (cls ? ' class="' + cls + '"' : '') + '>' + html(key, vars) + '</p>'; }
+
+  function explain(c, r, plain) {
+    var vars = { d: r.domain, n: c.n, pct: "", s: (c.selectors || []).join(", "), p: r.provider || (c.hosts && c.hosts[0] ? c.hosts[0].host : "") };
+    return plain ? txt(c.code, vars) : html(c.code, vars);
+  }
+
+  function fixFor(c, r) {
+    var d = r.domain, out = "";
+    switch (c.code) {
+      case "dmarc_missing":
+        if (r.hasMail) out = para("fix_dmarc_missing") + codeBlock("v=DMARC1; p=none; rua=mailto:dmarc@" + d) + para("fix_dmarc_missing2");
+        else out = para("fix_dmarc_missing_nomail") + codeBlock("v=DMARC1; p=reject;");
+        break;
+      case "dmarc_none": out = para("fix_dmarc_none"); break;
+      case "dmarc_quarantine": out = para("fix_dmarc_quarantine"); break;
+      case "dmarc_multiple": out = para("fix_dmarc_multiple"); break;
+      case "dmarc_invalid": out = para("fix_dmarc_invalid"); break;
+      case "spf_missing":
+        out = para("fix_spf_missing");
+        if (!r.hasMail) out += para("fix_spf_nomail") + codeBlock("v=spf1 -all");
+        else if (r.providerId === "google") out += para("fix_spf_google") + codeBlock("v=spf1 include:_spf.google.com ~all");
+        else if (r.providerId === "microsoft") out += para("fix_spf_ms") + codeBlock("v=spf1 include:spf.protection.outlook.com -all");
+        else out += para("fix_spf_other");
+        break;
+      case "spf_multiple": out = para("fix_spf_multiple"); break;
+      case "spf_plusall": case "spf_neutral": case "spf_noall": out = para("fix_spf_all"); break;
+      case "spf_toomany": out = para("fix_spf_toomany"); break;
+      case "dkim_notfound": case "dkim_cname": out = para("fix_dkim"); break;
+      default: return "";
+    }
+    return out + para("fix_where", null, "where");
+  }
+
+  function recordFor(c, r) {
+    var lines = [];
+    if (c.key === "spf" || c.key === "dmarc") lines = c.records || [];
+    if (c.key === "mx") lines = (c.hosts || []).map(function (h) { return h.pref + " " + h.host; });
+    if (c.key === "dkim") lines = (c.selectors || []).map(function (s) { return s + "._domainkey." + r.domain; });
+    if (!lines.length) return "";
+    return '<details><summary>' + html("recordH") + '</summary><pre class="rec">' + esc(lines.join("\n")) + '</pre></details>';
+  }
+
+  function notesFor(c) {
+    if (!c.notes || !c.notes.length) return "";
+    return '<ul class="notes">' + c.notes.map(function (n) { return '<li>' + html(n.code, { n: n.n, pct: n.pct }) + '</li>'; }).join("") + '</ul>';
+  }
+
+  function checkHtml(r, k) {
+    var c = r.checks[k], s = pillOf(c);
+    var fix = fixFor(c, r);
+    var fixBlock = fix ? '<details' + (s === "bad" ? " open" : "") + '><summary>' + html("fixH") + '</summary><div class="fix-body">' + fix + '</div></details>' : "";
+    return '<article class="check">' +
+      '<div class="check-head"><h3>' + html("n_" + k) + '<small>' + TECH[k] + '</small></h3>' +
+      '<span class="pill" data-s="' + s + '">' + html("pill_" + s) + '</span></div>' +
+      '<p>' + explain(c, r) + '</p>' + notesFor(c) + recordFor(c, r) + fixBlock + '</article>';
+  }
+
+  function needsWork(r) {
+    return ["dmarc", "spf", "dkim"].filter(function (k) {
+      var s = r.checks[k].status;
+      return s === "bad" || s === "warn" || s === "unknown";
+    });
+  }
+
+  function waText(r) {
+    var vars = { d: r.domain, v: txt("verdict_" + r.verdict), s: r.score };
+    var need = needsWork(r);
+    if (!need.length) return txt("wa_good", vars);
+    vars.list = need.map(function (k) { return txt("n_" + k).toLowerCase(); }).join(", ");
+    return txt("wa_fix", vars);
+  }
+
+  function shareUrl(r) {
+    var base = location.href.split(/[?#]/)[0];
+    return base + "?d=" + encodeURIComponent(r.domain) + (lang === "ca" ? "&lang=ca" : "");
+  }
+
+  function reportText(r) {
+    var date = new Date(r.checkedAt).toLocaleDateString(lang === "ca" ? "ca-ES" : "es-ES");
+    var out = [txt("report_title", { d: r.domain, date: date }), txt("report_result", { v: txt("verdict_" + r.verdict), s: r.score }), ""];
+    MAIN.concat(EXTRA).forEach(function (k) {
+      var c = r.checks[k];
+      out.push("• " + txt("n_" + k) + " (" + TECH[k] + "): " + txt("pill_" + c.status) + ". " + explain(c, r, true));
+      (c.notes || []).forEach(function (n) { out.push("   - " + txt(n.code, { n: n.n, pct: n.pct })); });
+      if (c.records && c.records.length) c.records.forEach(function (rec) { out.push("   " + rec); });
+    });
+    out.push("", txt("report_by", { url: shareUrl(r) }));
+    return out.join("\n");
+  }
+
+  function render(r) {
+    var provLine = "";
+    if (r.provider) provLine = '<p class="prov">' + html("provider", { p: r.provider }) + '</p>';
+    else if (r.checks.mx.hosts.length) provLine = '<p class="prov">' + html("providerHost", { p: r.checks.mx.hosts[0].host }) + '</p>';
+    var good = needsWork(r).length === 0;
+    var wa = "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(waText(r));
+
+    body.innerHTML =
+      '<p class="for">' + html("resultFor") + ' <b>' + esc(r.domain) + '</b></p>' +
+      '<div class="verdict" data-v="' + r.verdict + '">' +
+        '<div><h2 id="res-h" tabindex="-1">' + html("verdict_" + r.verdict) + '</h2><p>' + html("sum_" + r.verdict) + '</p>' + provLine + '</div>' +
+        '<div class="score"><span class="num">' + r.score + '<small>/100</small></span>' +
+        '<div class="meter" role="img" aria-label="' + r.score + ' / 100"><span style="width:' + r.score + '%"></span></div>' +
+        '<span class="lab">' + html("scoreLabel") + '</span></div>' +
+      '</div>' +
+      '<div class="checks">' + MAIN.map(function (k) { return checkHtml(r, k); }).join("") + '</div>' +
+      '<div class="advanced"><h3>' + html("advancedH") + '</h3><p>' + html("advancedP") + '</p>' +
+        '<div class="checks">' + EXTRA.map(function (k) { return checkHtml(r, k); }).join("") + '</div></div>' +
+      '<div class="cta"><div><h2>' + html(good ? "cta_h_good" : "cta_h_fix") + '</h2><p>' + html(good ? "cta_p_good" : "cta_p_fix") + '</p></div>' +
+        '<div class="cta-actions">' +
+          '<a class="btn btn-sun" href="' + esc(wa) + '" target="_blank" rel="noopener">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.5 7.4L3 20.5l1.6-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>' +
+            html(good ? "cta_wa_good" : "cta_wa_fix") + '</a>' +
+          '<button type="button" class="btn btn-ghost" id="copy-report">' + html("copyReport") + '</button>' +
+          '<button type="button" class="btn btn-ghost" id="copy-link">' + html("copyLink") + '</button>' +
+        '</div>' +
+        '<p class="copy-status" id="copy-status" aria-live="polite"></p>' +
+      '</div>';
+
+    document.getElementById("head-wa").href = wa;
+    document.getElementById("copy-report").addEventListener("click", function () { copy(reportText(r)); });
+    document.getElementById("copy-link").addEventListener("click", function () { copy(shareUrl(r)); });
+  }
+
+  function showLoading(d) {
+    lastError = null;
+    results.hidden = false;
+    body.innerHTML = '<p class="status-line"><span class="spinner" aria-hidden="true"></span>' + html("loading", { d: d }) + '</p>';
+  }
+  function showError(code, d) {
+    lastError = { code: code, d: d };
+    last = null;
+    results.hidden = false;
+    body.innerHTML = '<p class="status-line error" role="alert">' + html(code, { d: d }) + '</p>';
+  }
+
+  function copy(text) {
+    var status = document.getElementById("copy-status");
+    function done(ok) { if (status) status.textContent = txt(ok ? "copied" : "copyFail"); }
+    function fallback() {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        var ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        done(ok);
+      } catch (e) { done(false); }
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  }
+
+  function setUrl(d) {
+    try {
+      var u = new URL(location.href);
+      if (d) u.searchParams.set("d", d); else u.searchParams.delete("d");
+      history.replaceState(null, "", u.toString());
+    } catch (e) {}
+  }
+
+  function run(value) {
+    if (running) return Promise.resolve();
+    var d = CORE.normalizeDomain(value);
+    if (!d) { showError("errInvalid", ""); return Promise.resolve(); }
+    input.value = d;
+    running = true;
+    go.disabled = true;
+    showLoading(d);
+    return gather(d).then(function (raw) {
+      last = CORE.evaluate(d, raw);
+      render(last);
+      setUrl(d);
+      var h = document.getElementById("res-h");
+      if (h) h.focus();
+    }, function (e) {
+      showError(e && e.code ? e.code : "errNet", d);
+    }).then(function () { running = false; go.disabled = false; });
+  }
+
+  /* ---------- Idioma ---------- */
+  function setLang(l) {
+    lang = l;
+    var dict = l === "ca" ? CA : ES;
+    nodes.forEach(function (n) {
+      var k = n.getAttribute("data-t");
+      if (dict[k] !== undefined) n.innerHTML = dict[k];
+    });
+    document.documentElement.lang = l;
+    input.placeholder = D[l].placeholder;
+    document.querySelectorAll(".lang button").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === l));
+    });
+    if (last) render(last);
+    else if (lastError) showError(lastError.code, lastError.d);
+    try { localStorage.setItem("drLang", l); } catch (e) {}
+  }
+
+  /* ---------- Eventos ---------- */
+  form.addEventListener("submit", function (e) { e.preventDefault(); run(input.value); });
+  document.querySelectorAll(".js-try").forEach(function (b) {
+    b.addEventListener("click", function () { input.value = b.getAttribute("data-d"); run(input.value); });
+  });
+  body.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest(".js-copy") : null;
+    if (!b) return;
+    var value = b.getAttribute("data-copy");
+    var old = b.textContent;
+    var reset = function () { setTimeout(function () { b.textContent = old; }, 1500); };
+    try {
+      navigator.clipboard.writeText(value).then(function () { b.textContent = txt("copied"); reset(); }, function () { b.textContent = "✕"; reset(); });
+    } catch (err) { b.textContent = "✕"; reset(); }
+  });
+  document.querySelectorAll(".lang button").forEach(function (b) {
+    b.addEventListener("click", function () { setLang(b.getAttribute("data-lang")); });
+  });
+
+  var params = new URLSearchParams(location.search);
+  var start = "es";
+  var q = params.get("lang");
+  if (q === "ca" || q === "es") start = q;
+  else { try { if (localStorage.getItem("drLang") === "ca") start = "ca"; } catch (e) {} }
+  setLang(start);
+  if (params.get("d")) { input.value = params.get("d"); run(params.get("d")); }
+
+  window.__revision = { run: run, setLang: setLang, last: function () { return last; } };
+})();
+</script>
+</body>
+</html>

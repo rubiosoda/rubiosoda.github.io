@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soporte informático en remoto | David Rubio Informática</title>
+<meta name="description" content="Te arreglo el ordenador en remoto, sin salir de casa: ordenadores lentos o con virus, cuentas hackeadas, correo, impresoras, copias de seguridad y certificado digital. Precio cerrado antes de empezar y pagas cuando funciona. A domicilio en Badalona.">
+<meta property="og:title" content="David Rubio Informática, soporte informático en remoto">
+<meta property="og:description" content="Marca lo que le pasa a tu equipo y envíamelo por WhatsApp: te contesto con el precio antes de empezar.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1C6AA0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231C6AA0'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23F4B43A'%3EDR%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "David Rubio Informática",
+  "description": "Soporte informático en remoto para particulares y negocios de toda España, y a domicilio en Badalona y alrededores.",
+  "telephone": "+34665546387",
+  "email": "rubiosoriad@gmail.com",
+  "priceRange": "15 € - 40 €",
+  "areaServed": ["España", "Badalona", "Sant Adrià de Besòs", "Santa Coloma de Gramenet", "Montgat", "Tiana"],
+  "knowsLanguage": ["es", "ca"],
+  "openingHoursSpecification": [
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "16:00", "closes": "20:30"},
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "14:00"}
+  ]
+}
+</script>
+<style>
+  :root {
+    --paper: #F3F6F7;
+    --white: #FFFFFF;
+    --ink: #13283F;
+    --muted: #4F6072;
+    --sea: #1C6AA0;
+    --sea-deep: #134E78;
+    --sea-soft: #DCEAF4;
+    --sun: #F4B43A;
+    --sun-soft: #FCE9C2;
+    --line: #D3DDE4;
+    --radius-sm: 10px;
+    --radius-lg: 22px;
+    --wrap: 68rem;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.55;
+    padding-bottom: 5.5rem;
+  }
+  @media (min-width: 52rem) { body { padding-bottom: 0; } }
+  a { color: var(--sea-deep); text-underline-offset: 3px; }
+  :focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 1rem; }
+  @media (min-width: 40rem) { .wrap { padding: 0 1.5rem; } }
+  .skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--white); padding: .5rem 1rem; z-index: 10; }
+  .skip:focus { left: 1rem; }
+
+  /* Header */
+  .top { background: var(--white); border-bottom: 1px solid var(--line); }
+  .top .wrap { display: flex; align-items: center; gap: .75rem; min-height: 4rem; }
+  .brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; color: var(--ink); margin-right: auto; }
+  .brand .mark { width: 2.4rem; height: 2.4rem; border-radius: 11px; background: var(--sea); color: var(--sun); display: grid; place-items: center; font-weight: 700; font-size: 1rem; letter-spacing: .02em; flex: none; }
+  .brand-text b { display: block; font-size: 1.02rem; line-height: 1.15; }
+  .brand-text small { display: block; font-size: .85rem; color: var(--muted); line-height: 1.2; }
+  .lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; }
+  .lang button { font: inherit; font-size: .85rem; border: 0; background: transparent; color: var(--muted); padding: .3rem .65rem; border-radius: 999px; cursor: pointer; min-height: 2rem; }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+  .top .btn { display: none; }
+  @media (min-width: 52rem) { .top .btn { display: inline-flex; } }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; font: inherit; font-weight: 700; text-decoration: none; border: 0; cursor: pointer; border-radius: 999px; padding: .75rem 1.3rem; min-height: 3rem; }
+  .btn svg { width: 1.25rem; height: 1.25rem; flex: none; }
+  .btn-primary { background: var(--sea); color: var(--white); }
+  .btn-primary:hover { background: var(--sea-deep); }
+  .btn-quiet { background: transparent; color: var(--ink); border: 2px solid var(--ink); }
+  .btn-quiet:hover { background: var(--ink); color: var(--white); }
+
+  /* Hero */
+  .hero { padding: 2.25rem 0 3rem; }
+  .hero .wrap { display: grid; gap: 2rem; }
+  @media (min-width: 52rem) {
+    .hero { padding: 3.5rem 0 4.5rem; }
+    .hero .wrap { grid-template-columns: 1.15fr 1fr; gap: 3rem; align-items: start; }
+  }
+  h1 { font-size: clamp(2.15rem, 7.5vw, 3.6rem); line-height: 1.04; letter-spacing: -.025em; margin: 0 0 1rem; font-weight: 700; max-width: 14ch; }
+  .lede { font-size: 1.2rem; color: var(--muted); margin: 0 0 1.75rem; max-width: 34rem; }
+  .pick-label { font-weight: 700; margin: 0 0 .75rem; font-size: 1rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: .55rem; margin: 0; padding: 0; list-style: none; }
+  .chip { font: inherit; font-size: 1.02rem; text-align: left; background: var(--white); color: var(--ink); border: 2px solid var(--line); border-radius: 999px; padding: .6rem 1rem; min-height: 3rem; cursor: pointer; display: inline-flex; align-items: center; gap: .45rem; transition: background-color .15s, border-color .15s; }
+  .chip:hover { border-color: var(--sea); }
+  .chip .tick { width: 1.1rem; height: 1.1rem; border-radius: 50%; border: 2px solid var(--line); flex: none; display: grid; place-items: center; }
+  .chip[aria-pressed="true"] { background: var(--sun-soft); border-color: var(--sun); }
+  .chip[aria-pressed="true"] .tick { background: var(--ink); border-color: var(--ink); }
+  .chip[aria-pressed="true"] .tick::after { content: ""; width: .32rem; height: .55rem; border: solid var(--white); border-width: 0 2px 2px 0; transform: translateY(-1px) rotate(45deg); }
+  .chip.home { border-style: dashed; }
+
+  /* Composer */
+  .composer { background: var(--sea); color: var(--white); border-radius: var(--radius-lg); padding: 1.25rem; }
+  @media (min-width: 52rem) { .composer { padding: 1.75rem; position: sticky; top: 1.5rem; } }
+  .composer label { display: block; font-weight: 700; margin-bottom: .6rem; }
+  .bubble { position: relative; background: var(--white); color: var(--ink); border-radius: 18px 18px 4px 18px; padding: .2rem; }
+  .bubble textarea { width: 100%; min-height: 9.5rem; border: 0; resize: vertical; font: inherit; font-size: 1.05rem; line-height: 1.5; color: var(--ink); background: transparent; padding: .8rem .9rem; border-radius: 16px; }
+  .bubble textarea:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+  .composer .hint { font-size: .92rem; opacity: .9; margin: .6rem 0 1.1rem; }
+  .composer .btn-send { width: 100%; background: var(--sun); color: var(--ink); font-size: 1.1rem; min-height: 3.4rem; }
+  .composer .btn-send:hover { background: #F7C25E; }
+  .composer .call { display: block; text-align: center; margin-top: .9rem; color: var(--white); font-weight: 700; }
+  .promises { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: .35rem; font-size: .98rem; }
+  .promises li { display: flex; gap: .5rem; align-items: baseline; }
+  .promises li::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: var(--sun); flex: none; transform: translateY(-.1rem); }
+
+  /* Sections */
+  section { padding: 3rem 0; }
+  @media (min-width: 52rem) { section { padding: 4.25rem 0; } }
+  h2 { font-size: clamp(1.7rem, 4.5vw, 2.3rem); line-height: 1.1; letter-spacing: -.015em; margin: 0 0 .75rem; }
+  .section-lede { color: var(--muted); max-width: 38rem; margin: 0 0 2rem; }
+  .band { background: var(--white); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+
+  /* Steps */
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.5rem; counter-reset: step; }
+  @media (min-width: 52rem) { .steps { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; } }
+  .steps li { counter-increment: step; position: relative; padding-left: 3.4rem; }
+  .steps li::before { content: counter(step); position: absolute; left: 0; top: -.1rem; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--ink); color: var(--sun); display: grid; place-items: center; font-weight: 700; font-size: 1.15rem; }
+  .steps h3 { margin: 0 0 .35rem; font-size: 1.2rem; }
+  .steps p { margin: 0; color: var(--muted); }
+  .callout { margin: 2.5rem 0 0; padding: 1.1rem 1.25rem; background: var(--sun-soft); border-radius: var(--radius-sm); max-width: 46rem; }
+  .callout b { display: block; margin-bottom: .25rem; }
+  .callout p { margin: 0; }
+  .aside { margin: 1.25rem 0 0; color: var(--muted); max-width: 46rem; }
+
+  /* Prices */
+  .prices { display: grid; gap: 2.25rem; }
+  @media (min-width: 52rem) { .prices { grid-template-columns: 1fr 1fr; gap: 3.5rem; } }
+  .prices h3 { font-size: 1.25rem; margin: 0 0 .5rem; padding-bottom: .5rem; border-bottom: 3px solid var(--ink); }
+  .prices h3.main { border-bottom-color: var(--sea); }
+  .prices .group + .group { margin-top: 2.25rem; }
+  .plist { list-style: none; margin: 0; padding: 0; }
+  .plist li { display: flex; align-items: baseline; gap: .5rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+  .plist .what { flex: 1 1 auto; }
+  .plist .dots { flex: 1 1 1.5rem; min-width: 1rem; border-bottom: 2px dotted #A9B8C4; transform: translateY(-.3rem); }
+  .plist .price { font-weight: 700; white-space: nowrap; text-align: right; }
+  .plist .price small { display: block; font-weight: 400; font-size: .82rem; color: var(--muted); white-space: normal; }
+  @media (max-width: 30rem) { .plist .dots { display: none; } .plist li { flex-wrap: wrap; } .plist .price { margin-left: auto; } }
+  .note { margin-top: 2rem; padding: 1rem 1.2rem; border-left: 4px solid var(--sun); background: var(--paper); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; max-width: 44rem; }
+
+  /* About */
+  .about { display: grid; gap: 2rem; align-items: start; }
+  @media (min-width: 52rem) { .about { grid-template-columns: 13rem 1fr; gap: 3rem; } }
+  .portrait { width: 9rem; height: 9rem; border-radius: 50%; background: var(--sea); color: var(--sun); display: grid; place-items: center; font-size: 2.6rem; font-weight: 700; position: relative; overflow: hidden; }
+  @media (min-width: 52rem) { .portrait { width: 13rem; height: 13rem; font-size: 3.6rem; } }
+  .portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .about p { max-width: 40rem; margin: 0 0 1rem; }
+  .creds { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: .6rem; max-width: 40rem; }
+  .creds li { padding: .7rem 1rem; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+  .creds li span { display: block; color: var(--muted); font-size: .92rem; }
+
+  /* Area */
+  .area { display: grid; gap: 2rem; }
+  @media (min-width: 52rem) { .area { grid-template-columns: 1fr 1fr 1fr; gap: 3rem; } }
+  .area h3 { margin: 0 0 .5rem; font-size: 1.2rem; }
+  .area p { margin: 0; }
+  .towns { list-style: none; padding: 0; margin: .25rem 0 0; display: flex; flex-wrap: wrap; gap: .45rem; }
+  .towns li { background: var(--sea-soft); color: var(--sea-deep); border-radius: 999px; padding: .3rem .8rem; font-size: .98rem; }
+
+  /* FAQ */
+  .faq { max-width: 46rem; }
+  details { border-bottom: 1px solid var(--line); }
+  summary { cursor: pointer; list-style: none; padding: 1.05rem 2.2rem 1.05rem 0; font-weight: 700; font-size: 1.12rem; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; right: .25rem; top: .85rem; font-size: 1.5rem; font-weight: 400; color: var(--sea); }
+  details[open] summary::after { content: "−"; }
+  details p { margin: 0 0 1.1rem; color: var(--muted); max-width: 40rem; }
+
+  /* Footer */
+  footer { background: var(--ink); color: #D7E2EC; padding: 3rem 0 2.5rem; }
+  footer .wrap { display: grid; gap: 1.5rem; }
+  @media (min-width: 52rem) { footer .wrap { grid-template-columns: 1fr auto; align-items: end; } }
+  footer b { color: var(--white); font-size: 1.2rem; display: block; margin-bottom: .25rem; }
+  footer a { color: var(--sun); }
+  footer p { margin: 0; }
+  .contact-lines { display: grid; gap: .35rem; }
+
+  /* Mobile bar */
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--white); border-top: 1px solid var(--line); padding: .6rem .75rem calc(.6rem + env(safe-area-inset-bottom)); display: grid; grid-template-columns: 1.6fr 1fr; gap: .5rem; z-index: 5; }
+  .bar .btn { width: 100%; }
+  @media (min-width: 52rem) { .bar { display: none; } }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido" data-t="skip">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <span class="mark" aria-hidden="true">DR</span>
+      <span class="brand-text"><b>David Rubio Informática</b><small data-t="brandSub">Soporte informático en remoto</small></span>
+    </a>
+    <div class="lang" role="group" aria-label="Idioma">
+      <button type="button" data-lang="es" aria-pressed="true">ES</button>
+      <button type="button" data-lang="ca" aria-pressed="false">CA</button>
+    </div>
+    <a class="btn btn-primary js-wa" href="https://wa.me/34665546387">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.5 7.4L3 20.5l1.6-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
+      <span data-t="headerBtn">Escríbeme</span>
+    </a>
+  </div>
+</header>
+
+<main id="contenido">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <h1 data-t="h1">¿Qué le pasa a tu ordenador?</h1>
+        <p class="lede" data-t="lede">Soy David, técnico informático. Casi todo te lo arreglo en remoto, sin que salgas de casa ni esperes a que venga nadie. Marca lo que te pasa y envíamelo por WhatsApp: te contesto con el precio antes de empezar.</p>
+        <p class="pick-label" id="pick-label" data-t="pickLabel">Marca una o varias opciones</p>
+        <ul class="chips" aria-labelledby="pick-label">
+          <li><button type="button" class="chip" aria-pressed="false" data-k="lento"><span class="tick" aria-hidden="true"></span><span data-t="c_lento">Va muy lento</span></button></li>
+          <li><button type="button" class="chip" aria-pressed="false" data-k="virus"><span class="tick" aria-hidden="true"></span><span data-t="c_virus">Virus o anuncios raros</span></button></li>
+          <li><button type="button" class="chip" aria-pressed="false" data-k="hackeo"><span class="tick" aria-hidden="true"></span><span data-t="c_hackeo">Me han hackeado una cuenta</span></button></li>
+          <li><button type="button" class="chip" aria-pressed="false" data-k="programas"><span class="tick" aria-hidden="true"></span><span data-t="c_programas">Correo, Office o programas</span></button></li>
+          <li><button type="button" class="chip" aria-pressed="false" data-k="impresora"><span class="tick" aria-hidden="true"></span><span data-t="c_impresora">La impresora no va</span></button></li>
+          <li><button type="button" class="chip" aria-pressed="false" data-k="copias"><span class="tick" aria-hidden="true"></span><span data-t="c_copias">Copias de seguridad</span></button></li>
+          <li><button type="button" class="chip" aria-pressed="false" data-k="certificado"><span class="tick" aria-hidden="true"></span><span data-t="c_certificado">Certificado digital o idCAT</span></button></li>
+          <li><button type="button" class="chip" aria-pressed="false" data-k="clases"><span class="tick" aria-hidden="true"></span><span data-t="c_clases">Clases por videollamada</span></button></li>
+          <li><button type="button" class="chip" aria-pressed="false" data-k="negocio"><span class="tick" aria-hidden="true"></span><span data-t="c_negocio">Soporte para mi negocio</span></button></li>
+          <li><button type="button" class="chip home" aria-pressed="false" data-k="domicilio"><span class="tick" aria-hidden="true"></span><span data-t="c_domicilio">No enciende o hay que venir</span></button></li>
+        </ul>
+      </div>
+
+      <div class="composer">
+        <label for="msg" data-t="msgLabel">Tu mensaje</label>
+        <div class="bubble"><textarea id="msg" rows="6"></textarea></div>
+        <p class="hint" data-t="hint">Puedes cambiar el texto antes de enviarlo.</p>
+        <a class="btn btn-send" id="send" href="https://wa.me/34665546387" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.5 7.4L3 20.5l1.6-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
+          <span data-t="send">Enviar por WhatsApp</span>
+        </a>
+        <a class="call" href="tel:+34665546387" data-t="call">O llámame al 665 54 63 87</a>
+        <ul class="promises">
+          <li data-t="p1">Sin salir de casa</li>
+          <li data-t="p2">Precio cerrado antes de empezar</li>
+          <li data-t="p3">Pagas cuando funciona</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <section class="band" id="como" aria-labelledby="h-como">
+    <div class="wrap">
+      <h2 id="h-como" data-t="howH">Cómo funciona en remoto</h2>
+      <p class="section-lede" data-t="howLede">Solo necesitas el ordenador encendido y conexión a internet. Yo te guío en cada paso.</p>
+      <ol class="steps">
+        <li><h3 data-t="st1h">Me cuentas qué pasa</h3><p data-t="st1p">Por WhatsApp, con una foto o una captura si puedes. Te digo el precio cerrado antes de empezar.</p></li>
+        <li><h3 data-t="st2h">Me das acceso un momento</h3><p data-t="st2p">Te paso un enlace para instalar el programa de conexión, me dices el código que te aparece y entro.</p></li>
+        <li><h3 data-t="st3h">Lo arreglo mientras miras</h3><p data-t="st3p">Ves en tu pantalla todo lo que hago. Al terminar se cierra la conexión, compruebas que funciona y pagas por Bizum.</p></li>
+      </ol>
+      <div class="callout">
+        <b data-t="safeH">Tu seguridad primero</b>
+        <p data-t="safeP">Solo entro cuando tú me das el código y puedes cortar la conexión cuando quieras. Nunca te llamaré sin que me hayas escrito antes ni te pediré contraseñas o datos del banco. Si alguien lo hace diciendo que es soporte técnico, es una estafa: cuelga.</p>
+      </div>
+      <p class="aside" data-t="homeAside">Si el problema es de piezas (no enciende, cambiar el disco, cables o wifi), voy a domicilio en Badalona y alrededores.</p>
+    </div>
+  </section>
+
+  <section id="precios" aria-labelledby="h-precios">
+    <div class="wrap">
+      <h2 id="h-precios" data-t="pricesH">Precios</h2>
+      <p class="section-lede" data-t="pricesLede">Sabes lo que vas a pagar antes de que toque nada.</p>
+      <div class="prices">
+        <div class="group">
+          <h3 class="main" data-t="remoteH">En remoto</h3>
+          <ul class="plist">
+            <li><span class="what" data-t="r1">Consulta rápida, hasta 30 minutos</span><span class="dots" aria-hidden="true"></span><span class="price">15 €</span></li>
+            <li><span class="what" data-t="r2">Ordenador lento, virus o anuncios</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from25">desde 25 €</span></li>
+            <li><span class="what" data-t="r3">Cuenta o correo hackeado: recuperarla y protegerla</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from25b">desde 25 €</span></li>
+            <li><span class="what" data-t="r4">Correo, Office, programas o impresora</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from15">desde 15 €</span></li>
+            <li><span class="what" data-t="r5">Copias de seguridad automáticas</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from25c">desde 25 €</span></li>
+            <li><span class="what" data-t="r6">Certificado digital, idCAT, Cl@ve y Autofirma</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from20">desde 20 €</span></li>
+            <li><span class="what" data-t="r7">Clases de ordenador y móvil por videollamada</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="perHour">20 €/hora</span></li>
+          </ul>
+        </div>
+        <div>
+          <div class="group">
+            <h3 data-t="bizH">Para tu negocio</h3>
+            <ul class="plist">
+              <li><span class="what" data-t="b1">Soporte mensual en remoto: WhatsApp y conexión cuando lo necesites</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from25m">desde 25 €/mes</span></li>
+              <li><span class="what" data-t="b2">Seguridad básica: contraseñas, verificación en dos pasos y copias</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from40">desde 40 €</span></li>
+              <li><span class="what" data-t="b4">Proteger el correo de tu negocio contra suplantaciones (SPF, DKIM y DMARC). <a href="revision-correo.html">Revísalo gratis</a></span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from40c">desde 40 €</span></li>
+              <li><span class="what" data-t="b3">Alta en Google Maps y web sencilla</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="quote">te hago presupuesto</span></li>
+            </ul>
+          </div>
+          <div class="group">
+            <h3 data-t="homeH">A domicilio en Badalona y alrededores</h3>
+            <ul class="plist">
+              <li><span class="what" data-t="h1s">Revisión y diagnóstico</span><span class="dots" aria-hidden="true"></span><span class="price">15 €<small data-t="h1n">gratis si lo reparo</small></span></li>
+              <li><span class="what" data-t="h2s">Formatear e instalar Windows, guardando tus archivos</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from40b">desde 40 €</span></li>
+              <li><span class="what" data-t="h3s">Cambio a disco SSD (disco aparte)</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from30">desde 30 €</span></li>
+              <li><span class="what" data-t="h4s">Wifi, router y repetidores</span><span class="dots" aria-hidden="true"></span><span class="price" data-t="from30b">desde 30 €</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <p class="note" data-t="pricesNote">Son precios orientativos. Antes de empezar te confirmo el precio cerrado, y pagas por Bizum o transferencia cuando está solucionado.</p>
+    </div>
+  </section>
+
+  <section class="band" id="quien" aria-labelledby="h-quien">
+    <div class="wrap about">
+      <div class="portrait" aria-hidden="true">DR<img src="foto-david.jpg" alt="" onerror="this.remove()"></div>
+      <div>
+        <h2 id="h-quien" data-t="aboutH">Quién soy</h2>
+        <p data-t="about1">Soy David Rubio, de Badalona. Soy técnico en Sistemas Microinformáticos y Redes y estudio Administración de Sistemas Informáticos en Red. Hago prácticas gestionando los servidores de una empresa y dando soporte a su personal, gran parte en remoto.</p>
+        <p data-t="about2">Me gusta resolver problemas y explicarlos sin tecnicismos, para que entiendas qué le pasaba a tu equipo.</p>
+        <ul class="creds">
+          <li data-t="cr1">Técnico en Sistemas Microinformáticos y Redes<span>Institut Badalona VII</span></li>
+          <li data-t="cr2">Administración de Sistemas Informáticos en Red<span>CEAC FP, segundo curso</span></li>
+          <li data-t="cr3">Curso Superior de Ciberseguridad<span>Deusto Formación, 200 horas, nota 9,8</span></li>
+          <li data-t="cr4">Cisco Networking Academy<span>Networking Basics e Introducción a la Ciberseguridad</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="zona" aria-labelledby="h-zona">
+    <div class="wrap">
+      <h2 id="h-zona" data-t="areaH">Dónde y cuándo</h2>
+      <div class="area">
+        <div>
+          <h3 data-t="remoteWhereH">En remoto</h3>
+          <p data-t="remoteWhere">A cualquier lugar de España, en castellano o en catalán.</p>
+        </div>
+        <div>
+          <h3 data-t="homeWhereH">A domicilio</h3>
+          <ul class="towns">
+            <li>Badalona</li><li>Sant Adrià de Besòs</li><li>Santa Coloma de Gramenet</li><li>Montgat</li><li>Tiana</li>
+          </ul>
+        </div>
+        <div>
+          <h3 data-t="hoursH">Horario</h3>
+          <p data-t="hours1">Lunes a viernes, de 16:00 a 20:30.</p>
+          <p data-t="hours2">Sábados, de 10:00 a 14:00.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="preguntas" aria-labelledby="h-faq">
+    <div class="wrap">
+      <h2 id="h-faq" data-t="faqH">Preguntas frecuentes</h2>
+      <div class="faq">
+        <details><summary data-t="q1">¿Es seguro dejarte entrar en mi ordenador?</summary><p data-t="a1">Solo puedo entrar mientras tienes abierto el programa y me has dado el código. Ves todo lo que hago, puedes cortar cuando quieras y al cerrar el programa ya no tengo acceso.</p></details>
+        <details><summary data-t="q2">¿Y si no se puede arreglar en remoto?</summary><p data-t="a2">Te lo digo y no te cobro la consulta. Si estás en Badalona o alrededores voy a domicilio: la revisión son 15 € y no la cobro si hago la reparación.</p></details>
+        <details><summary data-t="q3">¿Cómo y cuándo pago?</summary><p data-t="a3">Cuando el problema está solucionado, por Bizum o transferencia. Antes de empezar ya sabes el precio.</p></details>
+        <details><summary data-t="q4">¿Qué pasa con mis fotos y documentos?</summary><p data-t="a4">No miro ni me guardo nada personal. Antes de formatear o cambiar el disco hago una copia de tus archivos.</p></details>
+        <details><summary data-t="q5">¿Atiendes en catalán?</summary><p data-t="a5">Sí, en catalán y en castellano, como prefieras.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <b>David Rubio Informática</b>
+      <p data-t="footSub">Soporte informático en remoto, y a domicilio en Badalona.</p>
+    </div>
+    <div class="contact-lines">
+      <p>WhatsApp: <a class="js-wa" href="https://wa.me/34665546387">665 54 63 87</a></p>
+      <p><span data-t="phone">Teléfono</span>: <a href="tel:+34665546387">665 54 63 87</a></p>
+      <p>Email: <a href="mailto:rubiosoriad@gmail.com">rubiosoriad@gmail.com</a></p>
+    </div>
+  </div>
+</footer>
+
+<nav class="bar" aria-label="Contacto rápido">
+  <a class="btn btn-primary js-wa" href="https://wa.me/34665546387">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.5 7.4L3 20.5l1.6-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
+    WhatsApp
+  </a>
+  <a class="btn btn-quiet" href="tel:+34665546387">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+    <span data-t="callShort">Llamar</span>
+  </a>
+</nav>
+
+<script>
+(function () {
+  var PHONE = "34665546387";
+
+  var CA = {
+    skip: "Salta al contingut",
+    brandSub: "Suport informàtic en remot",
+    headerBtn: "Escriu-me",
+    h1: "Què li passa al teu ordinador?",
+    lede: "Sóc en David, tècnic informàtic. Gairebé tot t'ho arreglo en remot, sense sortir de casa ni esperar que vingui ningú. Marca què et passa i envia-m'ho per WhatsApp: et responc amb el preu abans de començar.",
+    pickLabel: "Marca una o diverses opcions",
+    c_lento: "Va molt lent",
+    c_virus: "Virus o anuncis estranys",
+    c_hackeo: "M'han piratejat un compte",
+    c_programas: "Correu, Office o programes",
+    c_impresora: "La impressora no va",
+    c_copias: "Còpies de seguretat",
+    c_certificado: "Certificat digital o idCAT",
+    c_clases: "Classes per videotrucada",
+    c_negocio: "Suport per al meu negoci",
+    c_domicilio: "No s'encén o cal venir",
+    msgLabel: "El teu missatge",
+    hint: "Pots canviar el text abans d'enviar-lo.",
+    send: "Envia per WhatsApp",
+    call: "O truca'm al 665 54 63 87",
+    p1: "Sense sortir de casa",
+    p2: "Preu tancat abans de començar",
+    p3: "Pagues quan funciona",
+    howH: "Com funciona en remot",
+    howLede: "Només necessites l'ordinador encès i connexió a internet. Jo et guio a cada pas.",
+    st1h: "M'expliques què passa",
+    st1p: "Per WhatsApp, amb una foto o una captura si pots. Et dic el preu tancat abans de començar.",
+    st2h: "Em dones accés un moment",
+    st2p: "T'envio un enllaç per instal·lar el programa de connexió, em dius el codi que et surt i entro.",
+    st3h: "T'ho arreglo mentre mires",
+    st3p: "Veus a la pantalla tot el que faig. En acabar es tanca la connexió, comproves que funciona i pagues per Bizum.",
+    safeH: "Primer, la teva seguretat",
+    safeP: "Només entro quan tu em dones el codi i pots tallar la connexió quan vulguis. Mai et trucaré sense que m'hagis escrit abans ni et demanaré contrasenyes o dades del banc. Si algú ho fa dient que és suport tècnic, és una estafa: penja.",
+    homeAside: "Si el problema és de peces (no s'encén, canviar el disc, cables o wifi), vinc a domicili a Badalona i rodalia.",
+    pricesH: "Preus",
+    pricesLede: "Saps el que pagaràs abans que toqui res.",
+    remoteH: "En remot",
+    r1: "Consulta ràpida, fins a 30 minuts",
+    r2: "Ordinador lent, virus o anuncis",
+    r3: "Compte o correu piratejat: recuperar-lo i protegir-lo",
+    r4: "Correu, Office, programes o impressora",
+    r5: "Còpies de seguretat automàtiques",
+    r6: "Certificat digital, idCAT, Cl@ve i Autofirma",
+    r7: "Classes d'ordinador i mòbil per videotrucada",
+    from15: "des de 15 €", from20: "des de 20 €", from25: "des de 25 €", from25b: "des de 25 €", from25c: "des de 25 €",
+    from30: "des de 30 €", from30b: "des de 30 €", from40: "des de 40 €", from40b: "des de 40 €", from40c: "des de 40 €", perHour: "20 €/hora",
+    bizH: "Per al teu negoci",
+    b1: "Suport mensual en remot: WhatsApp i connexió quan ho necessitis",
+    from25m: "des de 25 €/mes",
+    b2: "Seguretat bàsica: contrasenyes, verificació en dos passos i còpies",
+    b4: "Protegir el correu del teu negoci contra suplantacions (SPF, DKIM i DMARC). <a href='revision-correo.html?lang=ca'>Revisa'l gratis</a>",
+    b3: "Alta a Google Maps i web senzilla",
+    quote: "et faig pressupost",
+    homeH: "A domicili a Badalona i rodalia",
+    h1s: "Revisió i diagnòstic",
+    h1n: "gratuït si el reparo",
+    h2s: "Formatar i instal·lar Windows, guardant els teus arxius",
+    h3s: "Canvi a disc SSD (disc a part)",
+    h4s: "Wifi, router i repetidors",
+    pricesNote: "Són preus orientatius. Abans de començar et confirmo el preu tancat, i pagues per Bizum o transferència quan està solucionat.",
+    aboutH: "Qui sóc",
+    about1: "Sóc en David Rubio, de Badalona. Sóc tècnic en Sistemes Microinformàtics i Xarxes i estudio Administració de Sistemes Informàtics en Xarxa. Faig pràctiques gestionant els servidors d'una empresa i donant suport al seu personal, en bona part en remot.",
+    about2: "M'agrada resoldre problemes i explicar-los sense tecnicismes, perquè entenguis què li passava al teu equip.",
+    cr1: "Tècnic en Sistemes Microinformàtics i Xarxes<span>Institut Badalona VII</span>",
+    cr2: "Administració de Sistemes Informàtics en Xarxa<span>CEAC FP, segon curs</span>",
+    cr3: "Curs Superior de Ciberseguretat<span>Deusto Formación, 200 hores, nota 9,8</span>",
+    cr4: "Cisco Networking Academy<span>Networking Basics i Introducció a la Ciberseguretat</span>",
+    areaH: "On i quan",
+    remoteWhereH: "En remot",
+    remoteWhere: "A qualsevol lloc d'Espanya, en català o en castellà.",
+    homeWhereH: "A domicili",
+    hoursH: "Horari",
+    hours1: "De dilluns a divendres, de 16:00 a 20:30.",
+    hours2: "Dissabtes, de 10:00 a 14:00.",
+    faqH: "Preguntes freqüents",
+    q1: "És segur deixar-te entrar al meu ordinador?",
+    a1: "Només puc entrar mentre tens obert el programa i m'has donat el codi. Veus tot el que faig, pots tallar quan vulguis i en tancar el programa ja no tinc accés.",
+    q2: "I si no es pot arreglar en remot?",
+    a2: "T'ho dic i no et cobro la consulta. Si ets a Badalona o rodalia vinc a domicili: la revisió són 15 € i no la cobro si faig la reparació.",
+    q3: "Com i quan pago?",
+    a3: "Quan el problema està solucionat, per Bizum o transferència. Abans de començar ja saps el preu.",
+    q4: "Què passa amb les meves fotos i documents?",
+    a4: "No miro ni em guardo res personal. Abans de formatar o canviar el disc faig una còpia dels teus arxius.",
+    q5: "Atens en català?",
+    a5: "Sí, en català i en castellà, com prefereixis.",
+    footSub: "Suport informàtic en remot, i a domicili a Badalona.",
+    phone: "Telèfon",
+    callShort: "Truca"
+  };
+
+  var MSG = {
+    es: {
+      intro: "Hola David, te escribo desde tu web.",
+      empty: "Te cuento lo que le pasa a mi equipo: ",
+      outro: "¿Cuánto me costaría?",
+      lento: "Mi ordenador va muy lento.",
+      virus: "Creo que tiene virus o me salen anuncios raros.",
+      hackeo: "Me han hackeado una cuenta y quiero recuperarla.",
+      programas: "Tengo un problema con el correo, Office o algún programa.",
+      impresora: "La impresora no me funciona.",
+      copias: "Quiero tener copias de seguridad de mis archivos.",
+      certificado: "Necesito ayuda con el certificado digital o el idCAT.",
+      clases: "Me gustaría recibir clases por videollamada.",
+      negocio: "Me interesa el soporte para mi negocio.",
+      domicilio: "Creo que hace falta que vengas (estoy en: )."
+    },
+    ca: {
+      intro: "Hola David, t'escric des de la teva web.",
+      empty: "T'explico què li passa al meu equip: ",
+      outro: "Quant em costaria?",
+      lento: "El meu ordinador va molt lent.",
+      virus: "Crec que té virus o em surten anuncis estranys.",
+      hackeo: "M'han piratejat un compte i el vull recuperar.",
+      programas: "Tinc un problema amb el correu, l'Office o algun programa.",
+      impresora: "La impressora no em funciona.",
+      copias: "Vull tenir còpies de seguretat dels meus arxius.",
+      certificado: "Necessito ajuda amb el certificat digital o l'idCAT.",
+      clases: "M'agradaria fer classes per videotrucada.",
+      negocio: "M'interessa el suport per al meu negoci.",
+      domicilio: "Crec que cal que vinguis (soc a: )."
+    }
+  };
+
+  var nodes = document.querySelectorAll("[data-t]");
+  var ES = {};
+  nodes.forEach(function (n) { ES[n.getAttribute("data-t")] = n.innerHTML; });
+
+  var lang = "es";
+  var edited = false;
+  var msg = document.getElementById("msg");
+  var send = document.getElementById("send");
+  var chips = document.querySelectorAll(".chip");
+
+  function selected() {
+    var out = [];
+    chips.forEach(function (c) { if (c.getAttribute("aria-pressed") === "true") out.push(c.getAttribute("data-k")); });
+    return out;
+  }
+
+  function compose() {
+    var m = MSG[lang];
+    var keys = selected();
+    if (!keys.length) return m.intro + " " + m.empty;
+    return m.intro + " " + keys.map(function (k) { return m[k]; }).join(" ") + " " + m.outro;
+  }
+
+  function waLink(text) {
+    return "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(text);
+  }
+
+  function updateLinks() {
+    var link = waLink(msg.value);
+    send.href = link;
+    document.querySelectorAll(".js-wa").forEach(function (a) { a.href = link; });
+  }
+
+  function refresh() {
+    if (!edited) msg.value = compose();
+    updateLinks();
+  }
+
+  function setLang(l) {
+    lang = l;
+    var dict = l === "ca" ? CA : ES;
+    nodes.forEach(function (n) {
+      var k = n.getAttribute("data-t");
+      if (dict[k] !== undefined) n.innerHTML = dict[k];
+    });
+    document.documentElement.lang = l;
+    document.querySelectorAll(".lang button").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === l));
+    });
+    edited = false;
+    refresh();
+    try { localStorage.setItem("drLang", l); } catch (e) {}
+  }
+
+  chips.forEach(function (c) {
+    c.addEventListener("click", function () {
+      c.setAttribute("aria-pressed", String(c.getAttribute("aria-pressed") !== "true"));
+      edited = false;
+      refresh();
+    });
+  });
+
+  msg.addEventListener("input", function () {
+    edited = true;
+    updateLinks();
+  });
+
+  document.querySelectorAll(".lang button").forEach(function (b) {
+    b.addEventListener("click", function () { setLang(b.getAttribute("data-lang")); });
+  });
+
+  var start = "es";
+  var q = new URLSearchParams(location.search).get("lang");
+  if (q === "ca" || q === "es") start = q;
+  else { try { if (localStorage.getItem("drLang") === "ca") start = "ca"; } catch (e) {} }
+  setLang(start);
+})();
+</script>
+</body>
+</html>
