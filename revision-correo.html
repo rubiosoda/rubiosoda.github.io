@@ -3,12 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Revisión del correo | David Rubio Informática</title>
-<meta name="description" content="Comprueba gratis si alguien puede enviar correos falsos en nombre de tu negocio. Revisamos SPF, DKIM y DMARC de tu dominio en unos segundos y te explicamos cómo arreglarlo.">
+<title>Comprueba gratis el SPF, DKIM y DMARC de tu dominio</title>
+<meta name="description" content="Comprueba gratis si alguien puede enviar correos falsos en nombre de tu negocio. Revisa el SPF, DKIM y DMARC de tu dominio en segundos y descubre cómo arreglarlo.">
+<link rel="canonical" href="https://rubiosoda.github.io/revision-correo.html">
+<meta property="og:site_name" content="David Rubio Informática">
 <meta property="og:title" content="¿Pueden suplantar el correo de tu negocio?">
 <meta property="og:description" content="Escribe tu dominio y en unos segundos sabrás si está protegido contra correos falsos en tu nombre.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://rubiosoda.github.io/revision-correo.html">
+<meta property="og:image" content="https://rubiosoda.github.io/og-revision.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="¿Pueden suplantar el correo de tu negocio? Revisión gratuita de SPF, DKIM y DMARC">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="ca_ES">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#1C6AA0">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Revisión del correo para negocios",
+  "url": "https://rubiosoda.github.io/revision-correo.html",
+  "description": "Comprueba gratis el SPF, DKIM y DMARC de un dominio y explica cómo protegerlo contra suplantaciones.",
+  "applicationCategory": "SecurityApplication",
+  "operatingSystem": "Cualquiera con navegador web",
+  "inLanguage": ["es", "ca"],
+  "isAccessibleForFree": true,
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+  "provider": {"@type": "LocalBusiness", "@id": "https://rubiosoda.github.io/#negocio", "name": "David Rubio Informática", "url": "https://rubiosoda.github.io/"}
+}
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231C6AA0'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23F4B43A'%3EDR%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,6 +95,15 @@
   .lang button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
   .top .btn { display: none; }
   @media (min-width: 52rem) { .top .btn { display: inline-flex; } }
+  .nav { display: none; }
+  @media (min-width: 66rem) {
+    .nav { display: flex; gap: 1.4rem; margin-right: .75rem; }
+    .nav a { color: var(--ink); text-decoration: none; font-size: .98rem; padding: .3rem 0; border-bottom: 2px solid transparent; }
+    .nav a:hover { border-bottom-color: var(--sun); }
+    .nav a[aria-current="page"] { border-bottom-color: var(--sea); }
+  }
+  .foot-nav { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; margin-top: 1rem; font-size: .98rem; }
+  .copy { font-size: .9rem; color: #A3B6C8; margin-top: .9rem; }
 
   /* Botones */
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; font: inherit; font-weight: 700; text-decoration: none; border: 0; cursor: pointer; border-radius: 999px; padding: .75rem 1.3rem; min-height: 3rem; }
@@ -88,7 +123,7 @@
     .hero { padding: 3.25rem 0 3.75rem; }
     .hero .wrap { grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: start; }
   }
-  .eyebrow { display: inline-block; font-size: .85rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--sea-deep); background: var(--sea-soft); border-radius: 999px; padding: .25rem .75rem; margin: 0 0 1rem; }
+  .eyebrow { display: inline-block; font-size: .92rem; font-weight: 700; color: var(--sea-deep); background: var(--sea-soft); border-radius: 999px; padding: .25rem .75rem; margin: 0 0 1rem; }
   h1 { font-size: clamp(2.05rem, 7vw, 3.35rem); line-height: 1.05; letter-spacing: -.025em; margin: 0 0 1rem; font-weight: 700; max-width: 16ch; text-wrap: balance; }
   .lede { font-size: 1.18rem; color: var(--muted); margin: 0 0 1.75rem; max-width: 36rem; }
   .form label { display: block; font-weight: 700; margin-bottom: .55rem; }
@@ -140,7 +175,7 @@
   .verdict[data-v="good"] .meter span { background: var(--ok); }
   .verdict[data-v="improve"] .meter span { background: var(--warn); }
   .verdict[data-v="risk"] .meter span { background: var(--bad); }
-  .score .lab { font-size: .85rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .score .lab { font-size: .9rem; color: var(--muted); }
 
   .checks { margin-top: 1.5rem; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-lg); }
   .check { padding: 1.2rem 1.25rem; border-top: 1px solid var(--line); }
@@ -216,6 +251,12 @@
       <span class="mark" aria-hidden="true">DR</span>
       <span class="brand-text"><b>David Rubio Informática</b><small data-t="brandSub">Soporte informático en remoto</small></span>
     </a>
+    <nav class="nav" aria-label="Secciones">
+      <a href="./#precios" data-t="navPrices">Precios</a>
+      <a href="revision-correo.html" aria-current="page" data-t="navMail">Revisión del correo</a>
+      <a href="./#quien" data-t="navAbout">Quién soy</a>
+      <a href="./#zona" data-t="navArea">Zona y horario</a>
+    </nav>
     <div class="lang" role="group" aria-label="Idioma">
       <button type="button" data-lang="es" aria-pressed="true">ES</button>
       <button type="button" data-lang="ca" aria-pressed="false">CA</button>
@@ -280,6 +321,12 @@
     <div>
       <b>David Rubio Informática</b>
       <p data-t="footSub">Soporte informático en remoto, y a domicilio en Badalona.</p>
+      <nav class="foot-nav" aria-label="Pie de página">
+        <a href="./" data-t="navHome">Inicio</a>
+        <a href="./#precios" data-t="navPrices2">Precios</a>
+        <a href="./#preguntas" data-t="navFaq">Preguntas frecuentes</a>
+      </nav>
+      <p class="copy">© 2026 David Rubio Informática</p>
     </div>
     <div class="contact-lines">
       <p>WhatsApp: <a href="https://wa.me/34665546387" target="_blank" rel="noopener">665 54 63 87</a></p>
@@ -506,6 +553,8 @@ var CORE = (function () {
     skip: "Salta al contingut",
     brandSub: "Suport informàtic en remot",
     headerBtn: "Escriu-me",
+    navPrices: "Preus", navMail: "Revisió del correu", navAbout: "Qui sóc", navArea: "Zona i horari",
+    navHome: "Inici", navPrices2: "Preus", navFaq: "Preguntes freqüents",
     eyebrow: "Eina gratuïta per a negocis",
     h1: "Poden suplantar el correu del teu negoci?",
     lede: "Escriu el domini del teu negoci i en uns segons sabràs si algú podria enviar correus falsos en nom teu i si els teus correus tenen el que cal per no acabar al correu brossa.",
