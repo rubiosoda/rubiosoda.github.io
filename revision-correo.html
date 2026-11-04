@@ -261,8 +261,8 @@
       <button type="button" data-lang="es" aria-pressed="true">ES</button>
       <button type="button" data-lang="ca" aria-pressed="false">CA</button>
     </div>
-    <a class="btn btn-primary" id="head-wa" href="https://wa.me/34665546387" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.5 7.4L3 20.5l1.6-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>
+    <a class="btn btn-primary" id="head-wa" href="./#contacto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
       <span data-t="headerBtn">Escríbeme</span>
     </a>
   </div>
@@ -329,9 +329,9 @@
       <p class="copy">© 2026 David Rubio Informática</p>
     </div>
     <div class="contact-lines">
-      <p>WhatsApp: <a href="https://wa.me/34665546387" target="_blank" rel="noopener">665 54 63 87</a></p>
-      <p><span data-t="phone">Teléfono</span>: <a href="tel:+34665546387">665 54 63 87</a></p>
+      <p><a href="./#contacto" data-t="footForm">Formulario de contacto</a></p>
       <p>Email: <a href="mailto:rubiosoriad@gmail.com">rubiosoriad@gmail.com</a></p>
+      <p><a href="privacidad.html" data-t="footPriv">Privacidad</a></p>
     </div>
   </div>
 </footer>
@@ -543,7 +543,6 @@ var CORE = (function () {
 /*CORE-END*/
 
 (function () {
-  var PHONE = "34665546387";
   var TECH = { dmarc: "DMARC", spf: "SPF", dkim: "DKIM", mx: "MX", dnssec: "DNSSEC", mtasts: "MTA-STS" };
   var MAIN = ["dmarc", "spf", "dkim", "mx"];
   var EXTRA = ["dnssec", "mtasts"];
@@ -574,6 +573,7 @@ var CORE = (function () {
     why3: "Gmail, Yahoo i Outlook exigeixen aquests registres a qui envia molts correus, i a tots els altres els ajuden a no acabar al correu brossa.",
     srcLine: "Font: <a href='https://www.incibe.es/incibe/sala-de-prensa/incibe-detecto-mas-de-122000-incidentes-de-ciberseguridad-en-2025' target='_blank' rel='noopener'>balanç de ciberseguretat 2025 de l'INCIBE</a>.",
     techNote: "Les consultes es fan als DNS públics de Google, i als de Cloudflare si fallen.",
+    footForm: "Formulari de contacte", footPriv: "Privacitat",
     footSub: "Suport informàtic en remot, i a domicili a Badalona.",
     phone: "Telèfon"
   };
@@ -653,7 +653,7 @@ var CORE = (function () {
       cta_p_fix: "Lo reviso contigo, añado los registros que faltan y vigilo los informes hasta dejarlo en protección máxima. Desde 40 €, con precio cerrado antes de empezar.",
       cta_h_good: "Todo en orden",
       cta_p_good: "Si quieres, lo vigilo cada mes junto al resto del soporte de tu negocio y te aviso si algo cambia.",
-      cta_wa_fix: "Pedir ayuda por WhatsApp", cta_wa_good: "Escríbeme por WhatsApp",
+      cta_wa_fix: "Pedir que me lo arregle", cta_wa_good: "Escríbeme",
       copyReport: "Copiar informe", copyLink: "Copiar enlace al resultado",
       copied: "Copiado.", copyFail: "No se ha podido copiar. Selecciona el texto a mano.",
       wa_fix: "Hola David, he revisado el correo de {d} en tu web y sale «{v}» ({s}/100). Falla: {list}. ¿Me ayudas a arreglarlo?",
@@ -735,7 +735,7 @@ var CORE = (function () {
       cta_p_fix: "Ho reviso amb tu, afegeixo els registres que falten i vigilo els informes fins a deixar-ho en protecció màxima. Des de 40 €, amb preu tancat abans de començar.",
       cta_h_good: "Tot en ordre",
       cta_p_good: "Si vols, t'ho vigilo cada mes amb la resta del suport del teu negoci i t'aviso si alguna cosa canvia.",
-      cta_wa_fix: "Demana ajuda per WhatsApp", cta_wa_good: "Escriu-me per WhatsApp",
+      cta_wa_fix: "Demana que t'ho arregli", cta_wa_good: "Escriu-me",
       copyReport: "Copia l'informe", copyLink: "Copia l'enllaç al resultat",
       copied: "Copiat.", copyFail: "No s'ha pogut copiar. Selecciona el text a mà.",
       wa_fix: "Hola David, he revisat el correu de {d} a la teva web i surt «{v}» ({s}/100). Falla: {list}. M'ajudes a arreglar-ho?",
@@ -924,7 +924,7 @@ var CORE = (function () {
     if (r.provider) provLine = '<p class="prov">' + html("provider", { p: r.provider }) + '</p>';
     else if (r.checks.mx.hosts.length) provLine = '<p class="prov">' + html("providerHost", { p: r.checks.mx.hosts[0].host }) + '</p>';
     var good = needsWork(r).length === 0;
-    var wa = "https://wa.me/" + PHONE + "?text=" + encodeURIComponent(waText(r));
+    var wa = "./?" + (lang === "ca" ? "lang=ca&" : "") + "msg=" + encodeURIComponent(waText(r)) + "#contacto";
 
     body.innerHTML =
       '<p class="for">' + html("resultFor") + ' <b>' + esc(r.domain) + '</b></p>' +
@@ -939,8 +939,8 @@ var CORE = (function () {
         '<div class="checks">' + EXTRA.map(function (k) { return checkHtml(r, k); }).join("") + '</div></div>' +
       '<div class="cta"><div><h2>' + html(good ? "cta_h_good" : "cta_h_fix") + '</h2><p>' + html(good ? "cta_p_good" : "cta_p_fix") + '</p></div>' +
         '<div class="cta-actions">' +
-          '<a class="btn btn-sun" href="' + esc(wa) + '" target="_blank" rel="noopener">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.5 7.4L3 20.5l1.6-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg>' +
+          '<a class="btn btn-sun" href="' + esc(wa) + '">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>' +
             html(good ? "cta_wa_good" : "cta_wa_fix") + '</a>' +
           '<button type="button" class="btn btn-ghost" id="copy-report">' + html("copyReport") + '</button>' +
           '<button type="button" class="btn btn-ghost" id="copy-link">' + html("copyLink") + '</button>' +
